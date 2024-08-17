@@ -23,9 +23,37 @@ configMap:
       path: /config/users/users-database.yaml
     password_reset:
       disable: true
-  session:
+  session: # TODO: Figure out how TF to use proper secrets Postgres and Redis auth
     redis:
-      enabled: false
+      enabled: true
+      deploy: true
+      enabledSecret: false
+      host: 'authelia-redis-master.production.svc.cluster.local'
+      port: 6379
+      username: ''
+      password:
+        disabled: false
+        secret_name: ~
+        value: ''
+        path: 'session.redis.password.txt'
+      database_index: 0
+      maximum_active_connections: 8
+      minimum_idle_connections: 0
+      tls:
+        enabled: false
+        server_name: ''
+        skip_verify: false
+      high_availability:
+        enabled: false
+        enabledSecret: false
+        sentinel_name: 'mysentinel'
+        username: ''
+        password:
+          disabled: false
+          secret_name: ~
+          value: ''
+          path: 'session.redis.sentinel.password.txt'
+        nodes: []
     cookies:
       - subdomain: "auth.staging"
         domain: "imranr.dev"
@@ -42,7 +70,7 @@ configMap:
       password:
         disabled: false
         secret_name: ~
-        value: ""
+        value: "authelia"
         path: "storage.postgres.password.txt"
       tls:
         enabled: false
@@ -68,7 +96,13 @@ configMap:
     max_retries: 3
     find_time: 120
     ban_time: 300
+
 postgresql:
+  auth:
+    postgresPassword: authelia
+    username: authelia
+    password: authelia
+    database: authelia
   primary:
     persistence:
       enabled: true
@@ -79,3 +113,33 @@ postgresql:
     containerSecurityContext:
       runAsUser: 1000
       runAsGroup: 1000
+
+redis:
+  architecture: standalone
+  auth:
+    enabled: false
+    sentinel: true
+    password: "redis"
+    existingSecret: ""
+    existingSecretPasswordKey: ""
+    usePasswordFiles: false
+  master:
+    resources: {}
+    priorityClassName: ""
+    persistence:
+      enabled: true
+      existingClaim: authelia-pvc
+      subPath: 'session'
+    podSecurityContext:
+      fsGroup: 1000
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+  replica:
+    replicaCount: 1
+    resources: {}
+    priorityClassName: ""
+    persistence:
+      enabled: true
+      existingClaim: authelia-pvc
+      subPath: 'session'
