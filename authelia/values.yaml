@@ -21,6 +21,8 @@ configMap:
         algorithm: sha512
         iterations: 100000
       path: /config/users/users-database.yaml
+    password_reset:
+      disable: true
   session:
     redis:
       enabled: false
