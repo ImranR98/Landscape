@@ -27,16 +27,25 @@ configMap:
     redis:
       enabled: false
     cookies:
-      -
-        subdomain: 'auth.staging'
-        domain: 'imranr.dev'
-        path: ''
-        default_redirection_url: ''
+      - subdomain: "auth.staging"
+        domain: "imranr.dev"
+        path: ""
+        default_redirection_url: ""
   storage:
     local:
-      enabled: true
-    postgres:
       enabled: false
+    postgres:
+      enabled: true
+      deploy: true
+      address: "tcp://authelia-postgresql.production.svc.cluster.local:5432"
+      timeout: "5 seconds"
+      password:
+        disabled: false
+        secret_name: ~
+        value: ""
+        path: "storage.postgres.password.txt"
+      tls:
+        enabled: false
   notifier:
     filesystem:
       enabled: true
@@ -51,11 +60,22 @@ configMap:
     issuer: imranr.dev
   access_control:
     rules:
-      - domain: '*.imranr.dev'
+      - domain: "*.imranr.dev"
         policy: one_factor
         subject:
-          - 'group:admins'
+          - "group:admins"
   regulation:
     max_retries: 3
     find_time: 120
     ban_time: 300
+postgresql:
+  primary:
+    persistence:
+      enabled: true
+      existingClaim: authelia-pvc
+      subPath: 'storage'
+    podSecurityContext:
+      fsGroup: 1000
+    containerSecurityContext:
+      runAsUser: 1000
+      runAsGroup: 1000

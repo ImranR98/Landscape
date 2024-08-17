@@ -1,0 +1,92 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: general-db-secret
+  namespace: production
+type: Opaque
+stringData:
+  POSTGRES_DB: general_db
+  POSTGRES_USER: general_db_user
+  POSTGRES_PASSWORD: general_db_password
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: general-db-pv
+  namespace: production
+spec:
+  capacity:
+    storage: 8Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /home/imranr/k8s/state/general-db
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+          - key: main-storage
+            operator: In
+            values:
+            - 'true'
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: general-db-pvc
+  namespace: production
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  volumeName: general-db-pv
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: general-db
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: general-db
+  template:
+    metadata:
+      labels:
+        app: general-db
+    spec:
+      containers:
+        - name: general-db
+          image: postgres:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: general-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: general-db-data
+              subPath: general-db
+      volumes:
+        - name: general-db-data
+          persistentVolumeClaim:
+            claimName: general-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: general-db-service
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: general-db
