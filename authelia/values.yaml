@@ -106,8 +106,8 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      existingClaim: authelia-pvc
-      subPath: 'storage'
+      existingClaim: state-nfs-pvc
+      subPath: 'authelia/storage'
     podSecurityContext:
       fsGroup: 1000
     containerSecurityContext:
@@ -128,8 +128,8 @@ redis:
     priorityClassName: ""
     persistence:
       enabled: true
-      existingClaim: authelia-pvc
-      subPath: 'session'
+      existingClaim: state-nfs-pvc
+      subPath: 'authelia/session'
     podSecurityContext:
       fsGroup: 1000
     containerSecurityContext:
@@ -141,5 +141,5 @@ redis:
     priorityClassName: ""
     persistence:
       enabled: true
-      existingClaim: authelia-pvc
-      subPath: 'session'
+      existingClaim: state-nfs-pvc
+      subPath: 'authelia/session'
