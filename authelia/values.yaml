@@ -88,6 +88,8 @@ configMap:
     issuer: imranr.dev
   access_control:
     rules:
+      - domain: auth.staging.imranr.dev
+        policy: bypass
       - domain: "*.imranr.dev"
         policy: one_factor
         subject:
