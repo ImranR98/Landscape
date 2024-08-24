@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: crowdsec-db-secret
+  namespace: production
+type: Opaque
+stringData:
+  POSTGRES_DB: crowdsec_db
+  POSTGRES_USER: crowdsec_db_user
+  POSTGRES_PASSWORD: crowdsec_db_password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-db
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crowdsec-db
+  template:
+    metadata:
+      labels:
+        app: crowdsec-db
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: crowdsec-db
+          image: postgres:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: crowdsec-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: state-nfs-volume
+              subPath: crowdsec/db
+      volumes:
+        - name: state-nfs-volume
+          persistentVolumeClaim:
+            claimName: state-nfs-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-db
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: crowdsec-db
