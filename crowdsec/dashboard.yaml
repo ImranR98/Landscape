@@ -1,0 +1,119 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: crowdsec-dashboard-db-secret
+  namespace: production
+type: Opaque
+stringData:
+  POSTGRES_DB: crowdsec_dashboard_db
+  POSTGRES_USER: crowdsec_dashboard_db_user
+  POSTGRES_PASSWORD: crowdsec_dashboard_db_password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-dashboard-db
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crowdsec-dashboard-db
+  template:
+    metadata:
+      labels:
+        app: crowdsec-dashboard-db
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: crowdsec-dashboard-db
+          image: postgres:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: crowdsec-dashboard-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: state-nfs-volume
+              subPath: crowdsec/dashboard-db
+      volumes:
+        - name: state-nfs-volume
+          persistentVolumeClaim:
+            claimName: state-nfs-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-dashboard-db
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: crowdsec-dashboard-db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-dashboard
+  namespace: production
+  labels:
+    app: crowdsec-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crowdsec-dashboard
+  template:
+    metadata:
+      labels:
+        app: crowdsec-dashboard
+    spec:
+      containers:
+      - name: crowdsec-dashboard
+        image: metabase/metabase:latest
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crowdsec-dashboard
+  namespace: production
+  labels:
+    app: crowdsec-dashboard
+spec:
+  selector:
+    app: crowdsec-dashboard
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: crowdsec-dashboard
+  namespace: production
+  annotations: 
+    kubernetes.io/ingress.class: traefik-external
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - match: Host(`crowdsec.staging.imranr.dev`)
+      kind: Rule
+      services:
+        - name: crowdsec-dashboard
+          port: 3000
+  tls:
+    secretName: imranr-dev-tls
