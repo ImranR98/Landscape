@@ -1,0 +1,32 @@
+{
+    "ntfyConfig": {
+        "configs": [
+            {
+                "id": "ntfy_official",
+                "host": "https://ntfy.sh",
+                "authHeader": null,
+                "topicPrefix": "logtfy_"
+            }
+        ],
+        "defaultConfig": "ntfy_official",
+        "fallbackConfig": null,
+        "modulesEnabledByDefault": false,
+        "catchModuleCrashes": false
+    },
+    "moduleCustomization": [
+        {
+            "module": "ssh_logins",
+            "enabled": true
+        },
+        {
+            "module": "traefik_geoblock_allowed_requests_k8s",
+            "enabled": true,
+            "loggerArg": "production"
+        },
+        {
+            "module": "authelia_logins_k8s",
+            "enabled": true,
+            "loggerArg": "production"
+        }
+    ]
+}
