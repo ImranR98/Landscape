@@ -19,9 +19,13 @@ agent:
   env:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik"
+    - name: LEVEL_DEBUG
+      value: "false"
 
 lapi:
-  replicas: 1
+  replicas: 1 # Seems to not work with multiple replicas (TODO - investigate)
+  dashboard:
+    enabled: true
   env:
     - name: BOUNCER_KEY_traefik
       value: "96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099"
