@@ -1,5 +1,5 @@
 pod:
-  kind: StatefulSet
+  kind: DaemonSet
   extraVolumeMounts:
     - name: users-database
       mountPath: "/config/users"
@@ -23,7 +23,7 @@ configMap:
       path: /config/users/users-database.yaml
     password_reset:
       disable: true
-  session: # TODO: Figure out how TF to use proper secrets Postgres and Redis auth
+  session:
     redis:
       enabled: true
       deploy: true
@@ -32,10 +32,7 @@ configMap:
       port: 6379
       username: ''
       password:
-        disabled: false
-        secret_name: ~
-        value: ''
-        path: 'session.redis.password.txt'
+        value: 'd0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3'
       database_index: 0
       maximum_active_connections: 8
       minimum_idle_connections: 0
@@ -44,15 +41,12 @@ configMap:
         server_name: ''
         skip_verify: false
       high_availability:
-        enabled: false
+        enabled: false # TODO: Look into this
         enabledSecret: false
         sentinel_name: 'mysentinel'
         username: ''
         password:
-          disabled: false
-          secret_name: ~
           value: ''
-          path: 'session.redis.sentinel.password.txt'
         nodes: []
     cookies:
       - subdomain: "auth.staging"
@@ -60,6 +54,8 @@ configMap:
         path: ""
         default_redirection_url: ""
   storage:
+    encryption_key:
+      value: 'bbf112811c99c821a7ca4120491bc2eb63579eac7dfcc14dfa4e53ff5a911ddc'
     local:
       enabled: false
     postgres:
@@ -68,10 +64,7 @@ configMap:
       address: "tcp://authelia-postgresql.production.svc.cluster.local:5432"
       timeout: "5 seconds"
       password:
-        disabled: false
-        secret_name: ~
-        value: "authelia"
-        path: "storage.postgres.password.txt"
+        value: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4"
       tls:
         enabled: false
   notifier:
@@ -103,7 +96,7 @@ postgresql:
   auth:
     postgresPassword: authelia
     username: authelia
-    password: authelia
+    password: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4"
     database: authelia
   primary:
     persistence:
@@ -121,9 +114,7 @@ redis:
   auth:
     enabled: false
     sentinel: true
-    password: "redis"
-    existingSecret: ""
-    existingSecretPasswordKey: ""
+    password: "d0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3"
     usePasswordFiles: false
   master:
     resources: {}
