@@ -7,7 +7,7 @@ pod:
   extraVolumes:
     - name: users-database
       secret:
-        secretName: authelia-users
+        secretName: users-database
         items:
           - key: users-database.yaml
             path: users-database.yaml
@@ -28,25 +28,25 @@ configMap:
       enabled: true
       deploy: true
       enabledSecret: false
-      host: 'authelia-redis-master.production.svc.cluster.local'
+      host: "authelia-redis-master.production.svc.cluster.local"
       port: 6379
-      username: ''
+      username: ""
       password:
-        value: 'd0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3'
+        value: "d0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3" # PROD TODO: Replace this with a different random value (and copy to redis section below)
       database_index: 0
       maximum_active_connections: 8
       minimum_idle_connections: 0
       tls:
         enabled: false
-        server_name: ''
+        server_name: ""
         skip_verify: false
       high_availability:
         enabled: false # TODO: Look into this
         enabledSecret: false
-        sentinel_name: 'mysentinel'
-        username: ''
+        sentinel_name: "mysentinel"
+        username: ""
         password:
-          value: ''
+          value: ""
         nodes: []
     cookies:
       - subdomain: "auth.staging"
@@ -55,7 +55,7 @@ configMap:
         default_redirection_url: ""
   storage:
     encryption_key:
-      value: 'bbf112811c99c821a7ca4120491bc2eb63579eac7dfcc14dfa4e53ff5a911ddc'
+      value: "bbf112811c99c821a7ca4120491bc2eb63579eac7dfcc14dfa4e53ff5a911ddc"
     local:
       enabled: false
     postgres:
@@ -64,7 +64,7 @@ configMap:
       address: "tcp://authelia-postgresql.production.svc.cluster.local:5432"
       timeout: "5 seconds"
       password:
-        value: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4"
+        value: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4" # PROD TODO: Replace this with a different random value (and copy to postgres section below)
       tls:
         enabled: false
   notifier:
@@ -84,7 +84,7 @@ configMap:
       - domain: auth.staging.imranr.dev
         policy: bypass
       - domain: "*.imranr.dev"
-        policy: one_factor
+        policy: two_factor
         subject:
           - "group:admins"
   regulation:
@@ -102,7 +102,7 @@ postgresql:
     persistence:
       enabled: true
       existingClaim: authelia-nfs-pvc
-      subPath: 'storage'
+      subPath: "storage"
     podSecurityContext:
       fsGroup: 1000
     containerSecurityContext:
@@ -122,7 +122,7 @@ redis:
     persistence:
       enabled: true
       existingClaim: authelia-nfs-pvc
-      subPath: 'session'
+      subPath: "session"
     podSecurityContext:
       fsGroup: 1000
     containerSecurityContext:
@@ -135,4 +135,4 @@ redis:
     persistence:
       enabled: true
       existingClaim: authelia-nfs-pvc
-      subPath: 'session'
+      subPath: "session"

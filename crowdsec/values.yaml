@@ -40,7 +40,7 @@ lapi:
     enabled: true
   env:
     - name: BOUNCER_KEY_traefik
-      value: "96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099"
+      value: "96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099" # PROD TODO: Replace this with a different random value
     - name: DB_NAME
       valueFrom:
         secretKeyRef:
