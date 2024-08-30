@@ -49,7 +49,7 @@ agent:
       value: "false"
 
 lapi:
-  replicas: 1 # Seems to not work with multiple replicas (TODO - investigate)
+  replicas: 1 # Multiple replicas should work after chart 0.11.2
   dashboard:
     enabled: true
   env:
@@ -75,3 +75,5 @@ lapi:
       enabled: false
     data:
       enabled: false
+  secrets:
+    csLapiSecret: "eb7528fb92305045dd5a3b4c1dbd64d16040c792e3b2607f9ab6efd2d5e2adb8" # PROD TODO: Replace this with a different random value
