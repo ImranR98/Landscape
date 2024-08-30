@@ -81,12 +81,50 @@ configMap:
     issuer: imranr.dev
   access_control:
     rules:
+      - domain: tv.staging.imranr.dev
+        policy: bypass
+      - domain: pixelntfy.staging.imranr.dev
+        policy: bypass
+      - domain: isbn.staging.imranr.dev
+        policy: bypass
+      - domain: nextcloud.staging.imranr.dev
+        policy: bypass
+      - domain: ha.staging.imranr.dev
+        policy: bypass
+      - domain: ntfy.staging.imranr.dev
+        policy: bypass
+      - domain: files.staging.imranr.dev
+        resources:
+        - '^/share([/?].*)?$'
+        - '^/static([/?].*)?$'
+        - '^/api/public([/?].*)?$'
+        policy: bypass
+      - domain: send.staging.imranr.dev
+        resources:
+        - '^/download/[^/]+/?$'
+        - '^/api/download/[^/]+/?$'
+        - '^/api/download/blob/[^/]+/?$'
+        - '^/api/info/[^/]+/?$'
+        - '^/api/metadata/[^/]+/?$'
+        - '^/[^/]+\.js$'
+        - '^/[^/]+\.svg$'
+        - '^/[^/]+\.css$'
+        - '^/[^/]+\.woff2$'
+        - '^/[^/]+\.png$'
+        - '^/__heartbeat__/?$'
+        policy: bypass
+      - domain: music.staging.imranr.dev
+        policy: bypass
+      - domain: immich.staging.imranr.dev
+        policy: bypass
       - domain: auth.staging.imranr.dev
         policy: bypass
-      - domain: "*.imranr.dev"
+      - domain: plausible.staging.imranr.dev
+        policy: bypass
+      - domain: '*.imranr.dev'
         policy: two_factor
         subject:
-          - "group:admins"
+          - 'group:admins'
   regulation:
     max_retries: 3
     find_time: 120
