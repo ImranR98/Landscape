@@ -16,10 +16,24 @@ config:
     decisions:
         - type: ban
           duration: 672h
-    # notifications:
-        # - http_default # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
+    notifications:
+        - http_default # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
     on_success: break
+  notifications-http.yaml: |
+    type: http          # Don't change
+    name: http_default  # Must match the registered plugin in the profile
 
+    log_level: info # One of "trace", "debug", "info", "warn", "error", "off"
+
+    group_wait: 30s       # Time to wait collecting alerts before relaying a message to this plugin, eg "30s"
+    group_threshold: 10   # Amount of alerts that triggers a message before <group_wait> has expired, eg "10"
+    # max_retry:          # Number of attempts to relay messages to plugins in case of error
+    # timeout:            # Time to wait for response from the plugin before considering the attempt a failure, eg "10s"
+
+    format: |
+      {{.|toJson}}
+    url: https://ntfy.sh/jebhgusbdgunweu # PROD TODO: Replace this with the prod version
+    method: POST
 
 container_runtime: containerd
 
