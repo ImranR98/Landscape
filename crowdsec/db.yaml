@@ -32,7 +32,7 @@ spec:
       containers:
         - name: crowdsec-db
           image: postgres:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 5432
           envFrom:

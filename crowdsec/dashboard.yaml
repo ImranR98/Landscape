@@ -34,7 +34,7 @@ spec:
       containers:
         - name: crowdsec-dashboard-db
           image: postgres:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 5432
           envFrom:
@@ -81,6 +81,7 @@ spec:
       containers:
       - name: crowdsec-dashboard
         image: metabase/metabase:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
 ---
