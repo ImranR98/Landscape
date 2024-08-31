@@ -109,6 +109,9 @@ spec:
   routes:
     - match: Host(`tv.staging.imranr.dev`)
       kind: Rule
+      middlewares:
+        - name: forwardauth-geoblock
+          namespace: production
       services:
         - name: jellyfin
           port: 8096
