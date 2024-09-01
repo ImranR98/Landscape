@@ -1,13 +1,20 @@
+# Note: The Crowdsec dashboard only works when you use the SQLite DB.
+#       SQLite can only be used by one instance at a time, so this means the service must be a singleton (no HA).
+#       If you decide to enable HA (2+ replcias) in the future (and lose the dashboard):
+#       1. Apply ha-db.yaml.
+#       2. Uncomment the commented-out lines in this file and set data.enabled to false, then apply the changes.
+#       3. Delete the IngressRoute for CrowdSec.
+
 config:
-  config.yaml.local: |
-    db_config:
-      type:     postgresql
-      user:     ${DB_USERNAME}
-      password: ${DB_PASSWORD}
-      db_name:  ${DB_NAME}
-      host:     crowdsec-db.production.svc.cluster.local
-      port:     5432
-      sslmode:  disable
+  # config.yaml.local: |
+  #   db_config:
+  #     type:     postgresql
+  #     user:     ${DB_USERNAME}
+  #     password: ${DB_PASSWORD}
+  #     db_name:  ${DB_NAME}
+  #     host:     crowdsec-db.production.svc.cluster.local
+  #     port:     5432
+  #     sslmode:  disable
   profiles.yaml: |
     name: default_ip_remediation
     debug: true
@@ -49,31 +56,32 @@ agent:
       value: "false"
 
 lapi:
-  replicas: 1 # Multiple replicas should work after chart 0.11.2
+  replicas: 1 # Multiple replicas should work after chart 0.11.2 (assuming an external DB is used)
   dashboard:
     enabled: true
   env:
     - name: BOUNCER_KEY_traefik
       value: "96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099" # PROD TODO: Replace this with a different random value
-    - name: DB_NAME
-      valueFrom:
-        secretKeyRef:
-          name: crowdsec-db-secret
-          key: POSTGRES_DB
-    - name: DB_USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: crowdsec-db-secret
-          key: POSTGRES_USER
-    - name: DB_PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: crowdsec-db-secret
-          key: POSTGRES_PASSWORD
+    # - name: DB_NAME
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: crowdsec-db-secret
+    #       key: POSTGRES_DB
+    # - name: DB_USERNAME
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: crowdsec-db-secret
+    #       key: POSTGRES_USER
+    # - name: DB_PASSWORD
+    #   valueFrom:
+    #     secretKeyRef:
+    #       name: crowdsec-db-secret
+    #       key: POSTGRES_PASSWORD
   persistentVolume:
     config:
       enabled: false
     data:
-      enabled: false
+      enabled: true
+      existingClaim: crowdsec-pvc
   secrets:
     csLapiSecret: "eb7528fb92305045dd5a3b4c1dbd64d16040c792e3b2607f9ab6efd2d5e2adb8" # PROD TODO: Replace this with a different random value
