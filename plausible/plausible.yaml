@@ -81,9 +81,6 @@ spec:
   routes:
     - match: Host(`plausible.staging.imranr.dev`)
       kind: Rule
-      middlewares:
-        - name: forwardauth-geoblock
-          namespace: production
       services:
         - name: plausible
           port: 8000
