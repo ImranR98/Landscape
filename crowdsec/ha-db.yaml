@@ -40,12 +40,12 @@ spec:
                 name: crowdsec-db-secret
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
-              name: crowdsec-nfs-volume
+              name: crowdsec-volume
               subPath: db
       volumes:
-        - name: crowdsec-nfs-volume
+        - name: crowdsec-volume
           persistentVolumeClaim:
-            claimName: crowdsec-nfs-pvc
+            claimName: crowdsec-pvc
 ---
 apiVersion: v1
 kind: Service
