@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mdscl
+  namespace: production
+  labels:
+    app: mdscl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mdscl
+  template:
+    metadata:
+      labels:
+        app: mdscl
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: mdscl-camera
+          image: imranrdev/media-date-standardize-copy-loop
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: phonesync
+              mountPath: /source
+              subPath: DCIM/Camera
+            - name: media
+              mountPath: /destination
+              subPath: Camera
+        - name: mdscl-screenshots
+          image: imranrdev/media-date-standardize-copy-loop
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: phonesync
+              mountPath: /source
+              subPath: Screenshots
+            - name: media
+              mountPath: /destination
+              subPath: Screenshots
+        - name: mdscl-screenrecs
+          image: imranrdev/media-date-standardize-copy-loop
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: phonesync
+              mountPath: /source
+              subPath: "Screen Recordings"
+            - name: media
+              mountPath: /destination
+              subPath: Screenshots
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: main-media-pvc
+        - name: phonesync
+          persistentVolumeClaim:
+            claimName: phone-sync-folders-pvc
