@@ -29,7 +29,7 @@ postgresql:
   primary:
     persistence:
       enabled: true
-      existingClaim: "nextcloud-nfs-pvc"
+      existingClaim: "nextcloud-pvc"
       subPath: "db"
     podSecurityContext:
       fsGroup: 1000
@@ -43,4 +43,4 @@ service:
 
 persistence:
   enabled: true
-  existingClaim: nextcloud-nfs-pvc
+  existingClaim: nextcloud-pvc

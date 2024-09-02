@@ -97,7 +97,7 @@ server:
   persistence:
     external:
       enabled: true
-      existingClaim: main-media-pvc # Not using NFS as it doesn't support fs watching (so Immich is locked to main-storage node)
+      existingClaim: main-media-pvc
       readOnly: false
 
 machine-learning:
