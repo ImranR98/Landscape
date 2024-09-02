@@ -35,7 +35,7 @@ spec:
               value: https://ntfy.staging.imranr.dev/nuc_services_dscpln
             - name: WEEKLY_LIMIT_NTFY_URL
               value: https://ntfy.staging.imranr.dev/nuc_services_dscpln
-            # - name: NTFY_TOKEN
+            # - name: NTFY_TOKEN # PROD TODO: Add
             #   value: 
             - name: TEXTFILE_BUDGET_INIT_AMT
               value: "2400"
@@ -78,49 +78,3 @@ spec:
       port: 3000
       targetPort: 3000
   type: ClusterIP
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: dscpln
-  namespace: production
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-    - match: Host(`dscpln.staging.imranr.dev`)
-      kind: Rule
-      middlewares:
-        - name: forwardauth-geoblock
-          namespace: production
-      services:
-        - name: dscpln-parsebalx
-          port: 3300
-  tls:
-    secretName: imranr-dev-tls
----
-apiVersion: traefik.io/v1alpha1
-kind: IngressRoute
-metadata:
-  name: parsebalx
-  namespace: production
-  annotations:
-    kubernetes.io/ingress.class: traefik-external
-spec:
-  entryPoints:
-    - web
-    - websecure
-  routes:
-    - match: Host(`bal.staging.imranr.dev`)
-      kind: Rule
-      middlewares:
-        - name: forwardauth-geoblock
-          namespace: production
-      services:
-        - name: dscpln-parsebalx
-          port: 3000
-  tls:
-    secretName: imranr-dev-tls
