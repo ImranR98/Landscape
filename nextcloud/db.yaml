@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: nextcloud-db-secret
+  namespace: production
+type: Opaque
+stringData:
+  POSTGRES_DB: nextcloud_db
+  POSTGRES_USER: nextcloud_db_user
+  POSTGRES_PASSWORD: nextcloud_db_password
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextcloud-db
+  namespace: production
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nextcloud-db
+  template:
+    metadata:
+      labels:
+        app: nextcloud-db
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: nextcloud-db
+          image: postgres:16-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: nextcloud-db-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: nextcloud-volume
+              subPath: db
+      volumes:
+        - name: nextcloud-volume
+          persistentVolumeClaim:
+            claimName: nextcloud-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nextcloud-db
+  namespace: production
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+  selector:
+    app: nextcloud-db
