@@ -7,14 +7,16 @@ nextcloud:
   containerPort: 80
   persistence:
     subPath: data
+  securityContext:
+    runAsGroup: 1000
 
 internalDatabase:
   enabled: false
 
 externalDatabase:
-  enabled: true
+  enabled: false
   type: postgresql
-  host: nextcloud-postgresql.production.svc.cluster.local
+  host: nextcloud-postgresql.production.svc.cluster.local:5432
   user: nextcloud
   password: 2e7121445b0b8f9de5b198df477d9067e0da7fd3bc9e0aa7b5ba33e2a8bd95e9 # PROD TODO: Replace this with a different random value (and copy to postgres section below)
 
