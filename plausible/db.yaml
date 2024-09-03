@@ -57,3 +57,26 @@ spec:
     - port: 5432
   selector:
     app: plausible-db
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: plausible-db
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      app: plausible-db
+  policyTypes:
+  - Egress
+  - Ingress
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: plausible
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: plausible
