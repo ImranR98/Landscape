@@ -45,7 +45,7 @@ postgresql:
       auth:
         username: immich
         database: immich
-        password: fd2dfdb69ac906e3e8fe4b7ab74cb3f265cc38a794a23f72843b997a2677a727 # PROD TODO: Replace this with a different random value
+        password: fd2dfdb69ac906e3e8fe4b7ab74cb3f265cc38a794a23f72843b997a2677a727 # PROD TODO: Replace this with a different random value (and in the postgres section below)
   primary:
     initdb:
       scripts:
@@ -81,9 +81,11 @@ redis:
 
 server:
   enabled: true
+  env:
+      DB_PASSWORD: fd2dfdb69ac906e3e8fe4b7ab74cb3f265cc38a794a23f72843b997a2677a727
   image:
     repository: ghcr.io/immich-app/immich-server
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   ingress:
     main:
       enabled: false
@@ -104,7 +106,7 @@ machine-learning:
   enabled: true
   image:
     repository: ghcr.io/immich-app/immich-machine-learning
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   env:
     TRANSFORMERS_CACHE: /cache
   persistence:
