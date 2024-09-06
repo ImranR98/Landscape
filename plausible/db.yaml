@@ -7,7 +7,7 @@ type: Opaque
 stringData:
   POSTGRES_DB: plausible_db
   POSTGRES_USER: plausible_db_user
-  POSTGRES_PASSWORD: plausible_db_password
+  POSTGRES_PASSWORD: e2afdb4872c0056ceb5c2db51693a2174d0c454147d7633b5b4aa379e281a28f # PROD TODO
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -7,7 +7,7 @@ type: Opaque
 stringData:
   POSTGRES_DB: nextcloud_db
   POSTGRES_USER: nextcloud_db_user
-  POSTGRES_PASSWORD: nextcloud_db_password
+  POSTGRES_PASSWORD: 96c57151976660baa48854b5ea010ee2f61bc6e0e83f87c9200de50e79aabbc2 # PROD TODO
 ---
 apiVersion: apps/v1
 kind: Deployment

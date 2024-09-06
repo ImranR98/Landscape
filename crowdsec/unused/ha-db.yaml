@@ -7,7 +7,7 @@ type: Opaque
 stringData:
   POSTGRES_DB: crowdsec_db
   POSTGRES_USER: crowdsec_db_user
-  POSTGRES_PASSWORD: crowdsec_db_password
+  POSTGRES_PASSWORD: 3b9b93407431a89e1871bf1db50f2bd31dc64b814e121fe3ac026d18edc22faf # PROD TODO
 ---
 apiVersion: apps/v1
 kind: Deployment
