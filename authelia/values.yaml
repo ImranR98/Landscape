@@ -1,3 +1,8 @@
+# NOTE: Any ending (strictly ending, not just containing) with the 'IGNORE INITIALLY' comment will be ignored by install.sh (but applied with update.sh) 
+#       The main use case for this is to avoid applying 'bypass' policies to some sites that
+#       should not be protected by Authelia once fully set up, but should be protected before
+#       some manual step is taken (usually manual creation of an admin account).
+
 image:
   pullPolicy: Always
 
@@ -133,16 +138,16 @@ configMap:
     issuer: imranr.dev
   access_control:
     rules:
-      - domain: tv.staging.imranr.dev
-        policy: bypass
+      - domain: tv.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
       - domain: pixelntfy.staging.imranr.dev
         policy: bypass
       - domain: isbn.staging.imranr.dev
         policy: bypass
-      - domain: nextcloud.staging.imranr.dev
-        policy: bypass
-      - domain: ha.staging.imranr.dev
-        policy: bypass
+      - domain: nextcloud.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
+      - domain: ha.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
       - domain: ntfy.staging.imranr.dev
         policy: bypass
       - domain: files.staging.imranr.dev
@@ -165,14 +170,14 @@ configMap:
         - '^/[^/]+\.png$'
         - '^/__heartbeat__/?$'
         policy: bypass
-      - domain: music.staging.imranr.dev
-        policy: bypass
-      - domain: immich.staging.imranr.dev
-        policy: bypass
+      - domain: music.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
+      - domain: immich.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
       - domain: auth.staging.imranr.dev
         policy: bypass
-      - domain: plausible.staging.imranr.dev
-        policy: bypass
+      - domain: plausible.staging.imranr.dev # IGNORE INITIALLY
+        policy: bypass # IGNORE INITIALLY
       - domain: '*.imranr.dev'
         policy: two_factor
         subject:

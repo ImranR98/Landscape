@@ -21,19 +21,19 @@ immich:
   persistence:
     library:
       existingClaim: immich-pvc
-  configuration:
-    oauth:
-      autoLaunch: true
-      autoRegister: true
-      buttonText: "Login with OAuth"
-      clientId: "immich"
-      clientSecret: "d63017b141d876f34698cae2ca51e95c6063a7e46095e38d2e8d7cd958da1dadad3f2e86"
-      defaultStorageQuota: 0
-      enabled: true
-      issuerUrl: "https://auth.staging.imranr.dev/.well-known/openid-configuration"
-    library:
-      watch:
-        enabled: true
+  # configuration:
+  #   oauth:
+  #     autoLaunch: true
+  #     autoRegister: true
+  #     buttonText: "Login with OAuth"
+  #     clientId: "immich"
+  #     clientSecret: "d63017b141d876f34698cae2ca51e95c6063a7e46095e38d2e8d7cd958da1dadad3f2e86"
+  #     defaultStorageQuota: 0
+  #     enabled: true
+  #     issuerUrl: "https://auth.staging.imranr.dev/.well-known/openid-configuration"
+  #   library:
+  #     watch:
+  #       enabled: true
 
 postgresql:
   enabled: true
