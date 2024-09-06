@@ -41,7 +41,7 @@ configMap:
         server_name: ""
         skip_verify: false
       high_availability:
-        enabled: false # TODO: Look into this
+        enabled: false
         enabledSecret: false
         sentinel_name: "mysentinel"
         username: ""
