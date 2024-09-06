@@ -39,8 +39,11 @@ config:
 
     format: |
       {{.|toJson}}
-    url: https://ntfy.sh/jebhgusbdgunweu # PROD TODO: Replace this with the prod version
+    url: https://ntfy.staging.imranr.dev/nuc_services_crowdsec # PROD TODO: Replace this with the prod version
     method: POST
+    headers:
+      Authorization: "Bearer tk_e4sjkxevnngm30q2t9n41yv6dp1qi" # PROD TODO
+      Title: "Crowdsec on PCX" # PROD TODO
 
 container_runtime: containerd
 

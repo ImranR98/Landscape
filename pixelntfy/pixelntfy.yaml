@@ -22,8 +22,18 @@ spec:
         ports:
         - containerPort: 3000
         env:
+        - name: NTFY_TOPIC
+          value: nuc_services_111b0c939e9862cdf8f
+        - name: NTFY_SERVER_URL
+          value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+        - name: NTFY_TOKEN
+          value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi # PROD TODO
         - name: ANALYTICS_SCRIPT_ELEMENT
           value: <script defer data-domain="pixelntfy.staging.imranr.dev" src="https://plausible.staging.imranr.dev/js/script.js"></script>
+        - name: TEXTFILE_BUDGET_INIT_AMT
+          value: "2400"
+        - name: TEXTFILE_FIRST_WEEK_BIAS_INIT_AMT
+          value: "1400"
 ---
 apiVersion: v1
 kind: Service

@@ -31,6 +31,11 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Camera
+          env:
+            - name: NTFY_URL
+              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+            - name: NTFY_TOKEN
+              value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenshots
           image: imranrdev/media-date-standardize-copy-loop
           imagePullPolicy: Always
@@ -41,6 +46,11 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Screenshots
+          env:
+            - name: NTFY_URL
+              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+            - name: NTFY_TOKEN
+              value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenrecs
           image: imranrdev/media-date-standardize-copy-loop
           imagePullPolicy: Always
@@ -51,6 +61,11 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Screenshots
+          env:
+            - name: NTFY_URL
+              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+            - name: NTFY_TOKEN
+              value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
       volumes:
         - name: media
           persistentVolumeClaim:
