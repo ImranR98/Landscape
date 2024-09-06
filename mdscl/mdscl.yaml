@@ -22,7 +22,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: mdscl-camera
-          image: imranrdev/media-date-standardize-copy-loop
+          image: imranrdev/media-date-standardize-copy-loop:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: phonesync
@@ -37,7 +37,7 @@ spec:
             - name: NTFY_TOKEN
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenshots
-          image: imranrdev/media-date-standardize-copy-loop
+          image: imranrdev/media-date-standardize-copy-loop:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: phonesync
@@ -52,7 +52,7 @@ spec:
             - name: NTFY_TOKEN
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenrecs
-          image: imranrdev/media-date-standardize-copy-loop
+          image: imranrdev/media-date-standardize-copy-loop:latest
           imagePullPolicy: Always
           volumeMounts:
             - name: phonesync

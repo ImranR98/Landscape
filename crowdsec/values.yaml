@@ -5,6 +5,9 @@
 #       2. Uncomment the commented-out lines in this file and set data.enabled to false, then apply the changes.
 #       3. Delete the IngressRoute for CrowdSec.
 
+image:
+  pullPolicy: Always
+
 config:
   # config.yaml.local: |
   #   db_config:

@@ -1,3 +1,6 @@
+image:
+  pullPolicy: Always
+
 pod:
   kind: DaemonSet
   extraVolumeMounts:
