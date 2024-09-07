@@ -27,7 +27,7 @@ spec:
         - name: NTFY_SERVER_URL
           value: "https://ntfy.$SERVICES_DOMAIN"
         - name: NTFY_TOKEN
-          value: $NTFY_SERVICE_USER_TOKEN # PROD TODO
+          value: $NTFY_SERVICE_USER_TOKEN
         - name: ANALYTICS_SCRIPT_ELEMENT
           value: <script defer data-domain="pixelntfy.$SERVICES_DOMAIN" src="https://plausible.$SERVICES_DOMAIN/js/script.js"></script>
         - name: TEXTFILE_BUDGET_INIT_AMT

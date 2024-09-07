@@ -9,6 +9,8 @@ export PROXY_NODE_HOSTNAME_LOWERCASE="${PROXY_NODE_HOSTNAME,,}"
 export STATE_DIR="$HERE/state"
 export MAIN_PARENT_DIR="$HERE/mock-data"
 
+export LOCAL_IP="$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | tail -1)"
+
 export SERVICES_DOMAIN="staging.imranr.dev"
 export SERVICES_TOP_DOMAIN="imranr.dev"
 export SERVICES_TLS_NAME="$(echo "$SERVICES_TOP_DOMAIN" | sed 's/\./-/g')"
@@ -125,3 +127,9 @@ export MOSQUITTO_CREDENTIALS='imranr:$7$101$/UX0d8KZVUjyFV0V$CMypWaIII96FRb/lSMV
 export NEXTCLOUD_DB_PASSWORD="96c57151976660baa48854b5ea010ee2f61bc6e0e83f87c9200de50e79aabbc2"
 export NEXTCLOUD_ADMIN_USER="imranr"
 export NEXTCLOUD_ADMIN_PASSWORD="zoom4321.Nextcloud"
+
+export PLAUSIBLE_DB_PASSWORD="e2afdb4872c0056ceb5c2db51693a2174d0c454147d7633b5b4aa379e281a28f"
+export PLAUSIBLE_SECRET_KEY="HEJkT3HCVfH9nhWJTB6NPq9faPvWZB69H51JJGQEWGVe2YNuOnoILpH3M+L/Cc8m"
+export PLAUSIBLE_TOTP_VAULT_KEY="cwcunViPJi3h5Vz9MXakMo2cmeEkIasIw7dxFwcUpgA="
+
+export STRELAYSRV_PROVIDED_BY_TEXT="ImranR.DEV (staging)"

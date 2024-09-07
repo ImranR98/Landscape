@@ -27,9 +27,9 @@ spec:
           - name: BASE_URL
             value: "https://plausible.$SERVICES_DOMAIN"
           - name: SECRET_KEY_BASE
-            value: "HEJkT3HCVfH9nhWJTB6NPq9faPvWZB69H51JJGQEWGVe2YNuOnoILpH3M+L/Cc8m" # PROD TODO: Replace with prod value
+            value: "$PLAUSIBLE_SECRET_KEY"
           - name: TOTP_VAULT_KEY
-            value: "cwcunViPJi3h5Vz9MXakMo2cmeEkIasIw7dxFwcUpgA=" # PROD TODO: Replace with prod value
+            value: "$PLAUSIBLE_TOTP_VAULT_KEY"
           - name: POSTGRES_DB
             valueFrom:
               secretKeyRef:
