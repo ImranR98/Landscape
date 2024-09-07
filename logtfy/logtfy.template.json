@@ -2,8 +2,8 @@
     "ntfyConfig": {
         "configs": [
             {
-                "id": "ntfy_imranr",
-                "host": "https://ntfy.staging.imranr.dev",
+                "id": "ntfy_self",
+                "host": "https://ntfy.$SERVICES_DOMAIN",
                 "authHeader": "Bearer $NTFY_SERVICE_USER_TOKEN",
                 "topicPrefix": "${MAIN_NODE_HOSTNAME_LOWERCASE}_services_"
             },
@@ -11,10 +11,10 @@
                 "id": "ntfy_official",
                 "host": "https://ntfy.sh",
                 "authHeader": null,
-                "topicPrefix": "logtfy_jebhgusbdgunweu"
+                "topicPrefix": "${MAIN_NODE_HOSTNAME_LOWERCASE}_services_"
             }
         ],
-        "defaultConfig": "ntfy_imranr",
+        "defaultConfig": "ntfy_self",
         "fallbackConfig": "ntfy_official",
         "modulesEnabledByDefault": false
     },

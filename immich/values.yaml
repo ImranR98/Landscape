@@ -27,7 +27,7 @@ immich:
   #     autoRegister: true
   #     buttonText: "Login with OAuth"
   #     clientId: "immich"
-  #     clientSecret: "d63017b141d876f34698cae2ca51e95c6063a7e46095e38d2e8d7cd958da1dadad3f2e86"
+  #     clientSecret: "$IMMICH_OAUTH_CLIENT_SECRET"
   #     defaultStorageQuota: 0
   #     enabled: true
   #     issuerUrl: "https://auth.$SERVICES_DOMAIN/.well-known/openid-configuration"
@@ -45,7 +45,7 @@ postgresql:
       auth:
         username: immich
         database: immich
-        password: fd2dfdb69ac906e3e8fe4b7ab74cb3f265cc38a794a23f72843b997a2677a727 # PROD TODO: Replace this with a different random value (and in the postgres section below)
+        password: $IMMICH_DB_PASSWORD
   primary:
     initdb:
       scripts:
@@ -82,7 +82,7 @@ redis:
 server:
   enabled: true
   env:
-      DB_PASSWORD: fd2dfdb69ac906e3e8fe4b7ab74cb3f265cc38a794a23f72843b997a2677a727
+      DB_PASSWORD: $IMMICH_DB_PASSWORD
   image:
     repository: ghcr.io/immich-app/immich-server
     pullPolicy: Always
