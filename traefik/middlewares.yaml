@@ -21,6 +21,7 @@ spec:
       countries:
         - CA
         - TZ
+        - US
 ---
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
