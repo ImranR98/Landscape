@@ -9,9 +9,9 @@ stringData:
     users:
       imranr:
         disabled: false
-        displayname: "Imran"
-        password: "$argon2id$v=19$m=65536,t=3,p=4$dVmAn9W/eMZZ8o/12U3ZZw$E1LbeFpxPHPD37YG8tWi3+1/+7bD8SmAZwPhQ+ZGbTw"  # yamllint disable-line rule:line-length
-        email: contact@imranr.dev
+        displayname: "$AUTHELIA_ADMIN_DISPLAYNAME"
+        password: "$AUTHELIA_ADMIN_PASSWORD_HASH"  # yamllint disable-line rule:line-length
+        email: $AUTHELIA_ADMIN_EMAIL
         groups:
           - admins
           - dev

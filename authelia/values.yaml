@@ -40,7 +40,7 @@ configMap:
       port: 6379
       username: ""
       password:
-        value: "d0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3" # PROD TODO: Replace this with a different random value (and copy to redis section below)
+        value: "$AUTHELIA_REDIS_PASSWORD"
       database_index: 0
       maximum_active_connections: 8
       minimum_idle_connections: 0
@@ -57,13 +57,13 @@ configMap:
           value: ""
         nodes: []
     cookies:
-      - subdomain: "auth.staging"
-        domain: "imranr.dev"
+      - subdomain: "$AUTHELIA_SUBDOMAIN"
+        domain: "$AUTHELIA_TOP_DOMAIN"
         path: ""
         default_redirection_url: ""
   storage:
     encryption_key:
-      value: "bbf112811c99c821a7ca4120491bc2eb63579eac7dfcc14dfa4e53ff5a911ddc"
+      value: "$AUTHELIA_DB_ENCRYPTION_KEY"
     local:
       enabled: false
     postgres:
@@ -72,7 +72,7 @@ configMap:
       address: "tcp://authelia-postgresql.production.svc.cluster.local:5432"
       timeout: "5 seconds"
       password:
-        value: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4" # PROD TODO: Replace this with a different random value (and copy to postgres section below)
+        value: "$AUTHELIA_DB_PASSWORD"
       tls:
         enabled: false
   notifier:
@@ -85,47 +85,20 @@ configMap:
       enabled: true
       ## See: https://www.authelia.com/c/oidc
       hmac_secret:
-        value: '483a0571ef6cbb99336571b7b053cbfd6f88f5c36d2e0c02d8db0b7d7b09285a' # PROD TODO: Replace this with the prod version
+        value: '$AUTHELIA_OIDC_HMAC_SECRET'
       jwks:
         - key:
-            value: | # PROD TODO: Replace this with the prod version
-              -----BEGIN PRIVATE KEY-----
-              MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7myWf4hzXnl1Z
-              VXnxIPAvS3w632Lpc7zqwlUZb/rNLm6ALSPKCSEXjcAMS9b1amshTenEZ59e60RG
-              wnBfRnYhmHRfyEC57ZdOfCOqEW64u7mXSHC1nIldREJV6khT3MlMiBLdp5BKRtB0
-              kZjiX/blx4zHuHc/ddFR5te1/CB6stOk5Wbcm3jg9kAYpONFZHB8UijLTXJGQQhI
-              rRBA8ccW3olMvxgxkXIH8jDsIljxP/YjgG5EHIcMe2HrF6nCl+GbbOxJWjRxpNWa
-              cW0PM3EccibCXJxH1Ewh5IFAotW+/Pe1UNZvGvSgg32PGrOSWQAlFrIbrH7G2ZCM
-              LUlYKBgXAgMBAAECggEAYdUGSdogMFDlXTC15ojGt+MlZY4YhqVUXxf4SMucfmM4
-              PJ9Nio44M5A4FjF2Z4SXWUbIISPoeBc4A65h601TTTGzfj9vgYXk4YjbEFUG6E78
-              +WdNX2fCOmDeNu91yEXas45CSFSZaiKDkkZa87IXjrwBLiWEChPmlE9NLhnM1i6F
-              VoS1UqpYgRgmOMv4GbGCqfp94sYvn31esAQrP9viNupPfN+bZjq0XCilWi2HdGGI
-              roJr8voHmhGuRriKktfNAwpdfxiJFU8rixT+npP3queNJvWPLlW8x6s3l0Rcx+eU
-              yZIB34tuZ/uucXBiRDkDxAq5WvdnkqalGDdECe7UAQKBgQDzny8xmEtCYV4Paa8u
-              /FPnOKhZFd/u3Gv3lDJUa3sRmZcXQ8FjoCSf2Vlsva3AISZkBzr3PaKK4xqWnRhR
-              QtUM3X4fxlWB9O/94bT8bsE6nzgnHTdsOji7zoi+liSbRAgTWjDIRaTe6Xl56iFl
-              nmpgoC0H9ypW4SJGIw+4C7aSvQKBgQDFI1v99e8M8c6MHz409kvE+8ZG3DqPHb/8
-              Ou4QqFi7GfMF4F5cy0RaKRsm6rfwxMRCaORthEZAFgM/ncQ/9t/V+qQ/f0H/zoCU
-              42YTPJdwgU6sHuSK3tRKHOL0/AWCTGwMQefhNN4CohwQQBGbOMLwFJ/bPRJvu2wW
-              KhoAB/zNYwKBgQC6Fc5LmKNrycm6BiTMw+omxI06ts28utsxWh5zg0GW+PWCzLtM
-              KMew3alDuUKdbfTQFQHCVm7wnXXys34em+j2kbzD8o/f20LxbtT6uHKaH4IZxmRO
-              I86wDZs/0JmXi4iLl6mJYEEGD9o8+EyYPT/OHKso2W+auw6d+iwIjdHgFQKBgGw3
-              pOAciUWJ1+CDphpcuetAau+rJVo68pD7qIPsZgkPjaDEMgiubK8xsX4Di0XYPgRW
-              oE6eNhIoA1CAwqJ6WxWTqWZR7WEHcv5IdlhJArj3wsAplTvGZrLoeI4TatLEMOvp
-              oei2pMi9RLqG8SNMXXZ9W+N1+xDqycLBCdTKjbQRAoGBANi6M+NaK+8aZNwI6e7k
-              LtASOuE/AXzTf7Oellmczu8HiYgPRlvkYVy9lby+C1ASjF+dz4xG3mMb5hOKpODH
-              FIDyj3i+V0NyxtXkHEPMWBoc8F5ot+49mxooc8SQleXxNKL/R925KBbIqnSUimrd
-              1yQZil3faVYl//7bQQc5pOuX
-              -----END PRIVATE KEY-----
+            value: |
+              $AUTHELIA_JWKS_KEY
       clients:
       - client_id: 'immich'
         client_name: 'immich'
-        client_secret: '$pbkdf2-sha512$310000$7CscErycuFXzvu74Kdzelw$RTpLh8NsqJ9eTVH5MFBo4EbsoIMmLLFWdAEwS43eX.pluhH32xsOH1hmqeO1uNSb43OyZ4gNhTi/39sAUAPwVg' # PROD TODO: Replace this
+        client_secret: '$AUTHELIA_IMMICH_CLIENT_SECRET'
         public: false
         authorization_policy: 'two_factor'
         redirect_uris:
-          - 'https://immich.staging.imranr.dev/auth/login'
-          - 'https://immich.staging.imranr.dev/user-settings'
+          - 'https://immich.$SERVICES_DOMAIN/auth/login'
+          - 'https://immich.$SERVICES_DOMAIN/user-settings'
           - 'app.immich:/'
         scopes:
           - 'openid'
@@ -138,25 +111,25 @@ configMap:
     issuer: imranr.dev
   access_control:
     rules:
-      - domain: tv.staging.imranr.dev # IGNORE INITIALLY
+      - domain: tv.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: pixelntfy.staging.imranr.dev
+      - domain: pixelntfy.$SERVICES_DOMAIN
         policy: bypass
-      - domain: isbn.staging.imranr.dev
+      - domain: isbn.$SERVICES_DOMAIN
         policy: bypass
-      - domain: nextcloud.staging.imranr.dev # IGNORE INITIALLY
+      - domain: nextcloud.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: ha.staging.imranr.dev # IGNORE INITIALLY
+      - domain: ha.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: ntfy.staging.imranr.dev
+      - domain: ntfy.$SERVICES_DOMAIN
         policy: bypass
-      - domain: files.staging.imranr.dev
+      - domain: files.$SERVICES_DOMAIN
         resources:
         - '^/share([/?].*)?$'
         - '^/static([/?].*)?$'
         - '^/api/public([/?].*)?$'
         policy: bypass
-      - domain: send.staging.imranr.dev
+      - domain: send.$SERVICES_DOMAIN
         resources:
         - '^/download/[^/]+/?$'
         - '^/api/download/[^/]+/?$'
@@ -170,13 +143,13 @@ configMap:
         - '^/[^/]+\.png$'
         - '^/__heartbeat__/?$'
         policy: bypass
-      - domain: music.staging.imranr.dev # IGNORE INITIALLY
+      - domain: music.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: immich.staging.imranr.dev # IGNORE INITIALLY
+      - domain: immich.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: auth.staging.imranr.dev
+      - domain: auth.$SERVICES_DOMAIN
         policy: bypass
-      - domain: plausible.staging.imranr.dev # IGNORE INITIALLY
+      - domain: plausible.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
       - domain: '*.imranr.dev'
         policy: two_factor
@@ -190,7 +163,7 @@ postgresql:
   auth:
     postgresPassword: authelia
     username: authelia
-    password: "fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4"
+    password: "$AUTHELIA_DB_PASSWORD"
     database: authelia
   primary:
     persistence:
@@ -208,7 +181,7 @@ redis:
   auth:
     enabled: false
     sentinel: true
-    password: "d0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3"
+    password: "$AUTHELIA_REDIS_PASSWORD"
     usePasswordFiles: false
   master:
     resources: {}
