@@ -25,7 +25,7 @@ spec:
           args: ["-c", "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"]
           env:
           - name: BASE_URL
-            value: "https://plausible.staging.imranr.dev"
+            value: "https://plausible.$SERVICES_DOMAIN"
           - name: SECRET_KEY_BASE
             value: "HEJkT3HCVfH9nhWJTB6NPq9faPvWZB69H51JJGQEWGVe2YNuOnoILpH3M+L/Cc8m" # PROD TODO: Replace with prod value
           - name: TOTP_VAULT_KEY

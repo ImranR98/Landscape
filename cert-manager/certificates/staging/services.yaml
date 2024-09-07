@@ -1,18 +1,18 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: imranr-dev
+  name: $SERVICES_TLS_NAME
   namespace: production
   annotations:
     reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
     reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "production"
 spec:
-  secretName: imranr-dev-tls
+  secretName: $SERVICES_TLS_NAME-tls-staging
   issuerRef:
-    name: letsencrypt-production
+    name: letsencrypt-staging
     kind: ClusterIssuer
-  commonName: "*.imranr.dev"
+  commonName: "*.$SERVICES_TOP_DOMAIN"
   dnsNames:
-    - "imranr.dev"
-    - "*.imranr.dev"
-    - "*.staging.imranr.dev"
+    - "$SERVICES_TOP_DOMAIN"
+    - "*.$SERVICES_TOP_DOMAIN"
+    - "*.$SERVICES_DOMAIN"

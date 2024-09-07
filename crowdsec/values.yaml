@@ -52,7 +52,7 @@ config:
         {{.|toJson}}
 
       # The plugin will make requests to this url, eg:  https://www.example.com/
-      url: https://ntfy.staging.imranr.dev/pcx_services_crowdsec
+      url: https://ntfy.$SERVICES_DOMAIN/pcx_services_crowdsec
 
       # Any of the http verbs: "POST", "GET", "PUT"...
       method: POST

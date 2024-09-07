@@ -1,11 +1,19 @@
 #!/bin/bash
 
-export STATE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)/state"
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+export STATE_DIR="$HERE/state"
+export MAIN_PARENT_DIR="$HERE/mock-data"
 
 export SERVICES_DOMAIN="staging.imranr.dev"
+export SERVICES_TOP_DOMAIN="imranr.dev"
+export SERVICES_TLS_NAME="$(echo "$SERVICES_TOP_DOMAIN" | sed 's/\./-/g')"
 
 export PROXY_USER="imranr"
 export PROXY_HOST="staging.imranr.dev"
+
+export DOMAIN_OWNER_EMAIL="contact@imranr.dev"
+
+export CLOUDFLARE_TOKEN="bIXJXhT5QCqzEcERBl1SycTCTYijFuFQVBIvvIyC"
 
 export AUTHELIA_ADMIN_DISPLAYNAME="Imran"
 export AUTHELIA_ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=3,p=4$dVmAn9W/eMZZ8o/12U3ZZw$E1LbeFpxPHPD37YG8tWi3+1/+7bD8SmAZwPhQ+ZGbTw'
@@ -14,7 +22,7 @@ export AUTHELIA_DB_ENCRYPTION_KEY="bbf112811c99c821a7ca4120491bc2eb63579eac7dfcc
 export AUTHELIA_DB_PASSWORD="fa0a28c575404f023570f47ae050c671b5a238c0433dd6391d3c37f523603dd4"
 export AUTHELIA_REDIS_PASSWORD="d0bacbcc807541cb08a6c4b51b7cba366046dfe658c354376f752d3e55155ad3"
 export AUTHELIA_SUBDOMAIN="auth.staging"
-export AUTHELIA_TOP_DOMAIN="imranr.dev"
+export AUTHELIA_TOP_DOMAIN="$SERVICES_TOP_DOMAIN"
 export AUTHELIA_OIDC_HMAC_SECRET="483a0571ef6cbb99336571b7b053cbfd6f88f5c36d2e0c02d8db0b7d7b09285a"
 export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC7myWf4hzXnl1Z
@@ -45,3 +53,4 @@ export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               1yQZil3faVYl//7bQQc5pOuX
               -----END PRIVATE KEY-----"
 export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$310000$7CscErycuFXzvu74Kdzelw$RTpLh8NsqJ9eTVH5MFBo4EbsoIMmLLFWdAEwS43eX.pluhH32xsOH1hmqeO1uNSb43OyZ4gNhTi/39sAUAPwVg'
+

@@ -108,7 +108,7 @@ configMap:
   log:
     level: debug
   totp:
-    issuer: imranr.dev
+    issuer: $SERVICES_TOP_DOMAIN
   access_control:
     rules:
       - domain: tv.$SERVICES_DOMAIN # IGNORE INITIALLY
@@ -151,7 +151,7 @@ configMap:
         policy: bypass
       - domain: plausible.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
-      - domain: '*.imranr.dev'
+      - domain: '*.$SERVICES_TOP_DOMAIN'
         policy: two_factor
         subject:
           - 'group:admins'
