@@ -59,7 +59,7 @@ agent:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik"
     - name: LEVEL_DEBUG
-      value: "false"
+      value: "true"
 
 lapi:
   replicas: 1 # Multiple replicas should work after chart 0.11.2 (assuming an external DB is used)
