@@ -23,7 +23,7 @@ spec:
         - containerPort: 3000
         env:
         - name: NTFY_TOPIC
-          value: ${MAIN_NODE_HOSTNAME}_services_pixelntfy
+          value: ${MAIN_NODE_HOSTNAME_LOWERCASE}_services_pixelntfy
         - name: NTFY_SERVER_URL
           value: "https://ntfy.$SERVICES_DOMAIN"
         - name: NTFY_TOKEN

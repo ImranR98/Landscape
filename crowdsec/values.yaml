@@ -52,7 +52,7 @@ config:
         {{.|toJson}}
 
       # The plugin will make requests to this url, eg:  https://www.example.com/
-      url: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME}_services_crowdsec
+      url: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_crowdsec
 
       # Any of the http verbs: "POST", "GET", "PUT"...
       method: POST

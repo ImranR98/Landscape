@@ -5,7 +5,7 @@
                 "id": "ntfy_imranr",
                 "host": "https://ntfy.staging.imranr.dev",
                 "authHeader": "Bearer $NTFY_SERVICE_USER_TOKEN",
-                "topicPrefix": "${MAIN_NODE_HOSTNAME}_services_"
+                "topicPrefix": "${MAIN_NODE_HOSTNAME_LOWERCASE}_services_"
             },
             {
                 "id": "ntfy_official",

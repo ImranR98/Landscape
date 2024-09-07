@@ -32,9 +32,9 @@ spec:
             - name: TEXTFILE_DATA_PROVIDER_DATA_PATH
               value: "/Transactions/Acc 2024.md"
             - name: MONTHLY_LIMIT_NTFY_URL
-              value: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME}_services_dscpln
+              value: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_dscpln
             - name: WEEKLY_LIMIT_NTFY_URL
-              value: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME}_services_dscpln
+              value: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_dscpln
             - name: NTFY_TOKEN
               value: $NTFY_SERVICE_USER_TOKEN
             - name: TEXTFILE_BUDGET_INIT_AMT

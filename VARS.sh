@@ -4,6 +4,8 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
 export MAIN_NODE_HOSTNAME="Frontier"
 export PROXY_NODE_HOSTNAME="Lifeline"
+export MAIN_NODE_HOSTNAME_LOWERCASE="${MAIN_NODE_HOSTNAME,,}"
+export PROXY_NODE_HOSTNAME_LOWERCASE="${PROXY_NODE_HOSTNAME,,}"
 export STATE_DIR="$HERE/state"
 export MAIN_PARENT_DIR="$HERE/mock-data"
 
@@ -13,6 +15,7 @@ export SERVICES_TLS_NAME="$(echo "$SERVICES_TOP_DOMAIN" | sed 's/\./-/g')"
 
 export PROXY_USER="imranr"
 export PROXY_HOST="staging.imranr.dev"
+export PROXY_SSH_STRING="$PROXY_USER"@"$PROXY_HOST"
 
 export DOMAIN_OWNER_EMAIL="contact@imranr.dev"
 
