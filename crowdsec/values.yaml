@@ -29,25 +29,38 @@ config:
     notifications:
         - http_default # Set the required http parameters in /etc/crowdsec/notifications/http.yaml before enabling this.
     on_success: break
-  notifications-http.yaml: |
-    type: http          # Don't change
-    name: http_default  # Must match the registered plugin in the profile
+  notifications:
+    http.yaml: |
+      type: http          # Don't change
+      
+      name: http_default  # Must match the registered plugin in the profile
 
-    log_level: info # One of "trace", "debug", "info", "warn", "error", "off"
+      # One of "trace", "debug", "info", "warn", "error", "off"
+      log_level: debug
 
-    group_wait: 30s       # Time to wait collecting alerts before relaying a message to this plugin, eg "30s"
-    group_threshold: 10   # Amount of alerts that triggers a message before <group_wait> has expired, eg "10"
-    # max_retry:          # Number of attempts to relay messages to plugins in case of error
-    # timeout:            # Time to wait for response from the plugin before considering the attempt a failure, eg "10s"
+      # group_wait:         # Time to wait collecting alerts before relaying a message to this plugin, eg "30s"
+      # group_threshold:    # Amount of alerts that triggers a message before <group_wait> has expired, eg "10"
+      # max_retry:          # Number of attempts to relay messages to plugins in case of error
+      # timeout:            # Time to wait for response from the plugin before considering the attempt a failure, eg "10s"
 
-    format: |
-      {{.|toJson}}
-    url: https://ntfy.staging.imranr.dev/nuc_services_crowdsec # PROD TODO: Replace this with the prod version
-    method: POST
-    headers:
-      Authorization: "Bearer tk_e4sjkxevnngm30q2t9n41yv6dp1qi" # PROD TODO
-      Title: "Crowdsec on PCX" # PROD TODO
+      #-------------------------
+      # plugin-specific options
 
+      # The following template receives a list of models.Alert objects
+      # The output goes in the http request body
+      format: |
+        {{.|toJson}}
+
+      # The plugin will make requests to this url, eg:  https://www.example.com/
+      url: https://ntfy.staging.imranr.dev/pcx_services_crowdsec
+
+      # Any of the http verbs: "POST", "GET", "PUT"...
+      method: POST
+
+      headers:
+        Authorization: Bearer tk_q37gtnj3ncck1i98b2lzw1u2ejzh0
+        Title: Crowdsec on PCX
+# PROD TODO Ntfy creds
 container_runtime: containerd
 
 agent:
