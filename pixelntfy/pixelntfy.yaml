@@ -23,11 +23,11 @@ spec:
         - containerPort: 3000
         env:
         - name: NTFY_TOPIC
-          value: pcx_services_pixelntfy
+          value: ${MAIN_NODE_HOSTNAME}_services_pixelntfy
         - name: NTFY_SERVER_URL
           value: "https://ntfy.$SERVICES_DOMAIN"
         - name: NTFY_TOKEN
-          value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi # PROD TODO
+          value: $NTFY_SERVICE_USER_TOKEN # PROD TODO
         - name: ANALYTICS_SCRIPT_ELEMENT
           value: <script defer data-domain="pixelntfy.$SERVICES_DOMAIN" src="https://plausible.$SERVICES_DOMAIN/js/script.js"></script>
         - name: TEXTFILE_BUDGET_INIT_AMT

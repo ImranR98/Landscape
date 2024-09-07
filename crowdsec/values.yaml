@@ -52,15 +52,15 @@ config:
         {{.|toJson}}
 
       # The plugin will make requests to this url, eg:  https://www.example.com/
-      url: https://ntfy.$SERVICES_DOMAIN/pcx_services_crowdsec
+      url: https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME}_services_crowdsec
 
       # Any of the http verbs: "POST", "GET", "PUT"...
       method: POST
 
       headers:
-        Authorization: Bearer tk_q37gtnj3ncck1i98b2lzw1u2ejzh0
-        Title: Crowdsec on PCX
-# PROD TODO Ntfy creds
+        Authorization: Bearer $NTFY_SERVICE_USER_TOKEN
+        Title: Crowdsec on ${MAIN_NODE_HOSTNAME}
+
 container_runtime: containerd
 
 agent:
@@ -80,7 +80,7 @@ lapi:
     enabled: true
   env:
     - name: BOUNCER_KEY_traefik
-      value: "96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099" # PROD TODO: Replace this with a different random value
+      value: "$CROWDSEC_BOUNCER_KEY"
     # - name: DB_NAME
     #   valueFrom:
     #     secretKeyRef:
@@ -103,4 +103,4 @@ lapi:
       enabled: true
       existingClaim: crowdsec-pvc
   secrets:
-    csLapiSecret: "eb7528fb92305045dd5a3b4c1dbd64d16040c792e3b2607f9ab6efd2d5e2adb8" # PROD TODO: Replace this with a different random value
+    csLapiSecret: "$CROWDSEC_LAPI_SECRET"

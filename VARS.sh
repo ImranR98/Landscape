@@ -1,6 +1,9 @@
 #!/bin/bash
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+
+export MAIN_NODE_HOSTNAME="Frontier"
+export PROXY_NODE_HOSTNAME="Lifeline"
 export STATE_DIR="$HERE/state"
 export MAIN_PARENT_DIR="$HERE/mock-data"
 
@@ -14,6 +17,8 @@ export PROXY_HOST="staging.imranr.dev"
 export DOMAIN_OWNER_EMAIL="contact@imranr.dev"
 
 export CLOUDFLARE_TOKEN="bIXJXhT5QCqzEcERBl1SycTCTYijFuFQVBIvvIyC"
+
+export NTFY_SERVICE_USER_TOKEN="tk_e4sjkxevnngm30q2t9n41yv6dp1qi"
 
 export AUTHELIA_ADMIN_DISPLAYNAME="Imran"
 export AUTHELIA_ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=3,p=4$dVmAn9W/eMZZ8o/12U3ZZw$E1LbeFpxPHPD37YG8tWi3+1/+7bD8SmAZwPhQ+ZGbTw'
@@ -54,3 +59,5 @@ export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               -----END PRIVATE KEY-----"
 export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$310000$7CscErycuFXzvu74Kdzelw$RTpLh8NsqJ9eTVH5MFBo4EbsoIMmLLFWdAEwS43eX.pluhH32xsOH1hmqeO1uNSb43OyZ4gNhTi/39sAUAPwVg'
 
+export CROWDSEC_BOUNCER_KEY="96e26fdf5a9ae8775280c96a7d2241ab389f68c0d44b1022ffa300d5dd8bc099"
+export CROWDSEC_LAPI_SECRET="eb7528fb92305045dd5a3b4c1dbd64d16040c792e3b2607f9ab6efd2d5e2adb8"
