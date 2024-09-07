@@ -33,7 +33,7 @@ spec:
               subPath: Camera
           env:
             - name: NTFY_URL
-              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+              value: "https://ntfy.staging.imranr.dev/pcx_services_mdscl_errors"
             - name: NTFY_TOKEN
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenshots
@@ -48,7 +48,7 @@ spec:
               subPath: Screenshots
           env:
             - name: NTFY_URL
-              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+              value: "https://ntfy.staging.imranr.dev/pcx_services_mdscl_errors"
             - name: NTFY_TOKEN
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
         - name: mdscl-screenrecs
@@ -63,7 +63,7 @@ spec:
               subPath: Screenshots
           env:
             - name: NTFY_URL
-              value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+              value: "https://ntfy.staging.imranr.dev/pcx_services_mdscl_errors"
             - name: NTFY_TOKEN
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
       volumes:

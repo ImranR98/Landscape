@@ -32,9 +32,9 @@ spec:
             - name: TEXTFILE_DATA_PROVIDER_DATA_PATH
               value: "/Transactions/Acc 2024.md"
             - name: MONTHLY_LIMIT_NTFY_URL
-              value: https://ntfy.staging.imranr.dev/nuc_services_dscpln
+              value: https://ntfy.staging.imranr.dev/pcx_services_dscpln
             - name: WEEKLY_LIMIT_NTFY_URL
-              value: https://ntfy.staging.imranr.dev/nuc_services_dscpln
+              value: https://ntfy.staging.imranr.dev/pcx_services_dscpln
             - name: NTFY_TOKEN # PROD TODO: Replace with prod version
               value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi
             - name: TEXTFILE_BUDGET_INIT_AMT

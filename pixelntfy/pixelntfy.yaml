@@ -23,9 +23,9 @@ spec:
         - containerPort: 3000
         env:
         - name: NTFY_TOPIC
-          value: nuc_services_111b0c939e9862cdf8f
+          value: pcx_services_pixelntfy
         - name: NTFY_SERVER_URL
-          value: "https://ntfy.staging.imranr.dev/nuc_services_mdscl_errors"
+          value: "https://ntfy.staging.imranr.dev"
         - name: NTFY_TOKEN
           value: tk_e4sjkxevnngm30q2t9n41yv6dp1qi # PROD TODO
         - name: ANALYTICS_SCRIPT_ELEMENT

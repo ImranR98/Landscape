@@ -5,7 +5,7 @@
                 "id": "ntfy_imranr",
                 "host": "https://ntfy.staging.imranr.dev",
                 "authHeader": "Bearer tk_e4sjkxevnngm30q2t9n41yv6dp1qi",
-                "topicPrefix": "nuc_services_"
+                "topicPrefix": "pcx_services_"
             },
             {
                 "id": "ntfy_official",
