@@ -8,8 +8,9 @@ export MAIN_NODE_HOSTNAME_LOWERCASE="${MAIN_NODE_HOSTNAME,,}"
 export PROXY_NODE_HOSTNAME_LOWERCASE="${PROXY_NODE_HOSTNAME,,}"
 export STATE_DIR="$HERE/state"
 export MAIN_PARENT_DIR="$HERE/mock-data"
+export ADMIN_PUBLIC_SSH_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL3P8xB/GJ71D+XMm6ityn5IFw5trR9uiwOKXcgeFcxm imranr@PC"
 
-export LOCAL_IP="$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | tail -1)"
+export TRAEFIK_TRUSTED_IP_RANGE="$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1' | tail -1)"
 
 export SERVICES_DOMAIN="staging.imranr.dev"
 export SERVICES_TOP_DOMAIN="imranr.dev"
