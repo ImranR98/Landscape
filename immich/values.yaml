@@ -10,10 +10,10 @@ image:
   tag: release
 
 podSecurityContext:
-  fsGroup: $UID
+  fsGroup: $MY_UID
 securityContext:
-  runAsUser: $UID
-  runAsGroup: $UID
+  runAsUser: $MY_UID
+  runAsGroup: $MY_UID
 
 immich:
   metrics:
@@ -58,10 +58,10 @@ postgresql:
       existingClaim: immich-pvc
       subPath: "postgres"
     podSecurityContext:
-      fsGroup: $UID
+      fsGroup: $MY_UID
     containerSecurityContext:
-      runAsUser: $UID
-      runAsGroup: $UID
+      runAsUser: $MY_UID
+      runAsGroup: $MY_UID
 
 redis:
   enabled: true
@@ -74,10 +74,10 @@ redis:
       existingClaim: immich-pvc
       subPath: "redis"
     podSecurityContext:
-      fsGroup: $UID
+      fsGroup: $MY_UID
     containerSecurityContext:
-      runAsUser: $UID
-      runAsGroup: $UID
+      runAsUser: $MY_UID
+      runAsGroup: $MY_UID
 
 server:
   enabled: true

@@ -171,10 +171,10 @@ postgresql:
       existingClaim: authelia-pvc
       subPath: "storage"
     podSecurityContext:
-      fsGroup: $UID
+      fsGroup: $MY_UID
     containerSecurityContext:
-      runAsUser: $UID
-      runAsGroup: $UID
+      runAsUser: $MY_UID
+      runAsGroup: $MY_UID
 
 redis:
   architecture: standalone
@@ -191,10 +191,10 @@ redis:
       existingClaim: authelia-pvc
       subPath: "session"
     podSecurityContext:
-      fsGroup: $UID
+      fsGroup: $MY_UID
     containerSecurityContext:
-      runAsUser: $UID
-      runAsGroup: $UID
+      runAsUser: $MY_UID
+      runAsGroup: $MY_UID
   replica:
     replicaCount: 1
     resources: {}
