@@ -25,9 +25,9 @@ spec:
         app: nextcloud-db
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: $UID
+        runAsGroup: $UID
+        fsGroup: $UID
       containers:
         - name: nextcloud-db
           image: postgres:16-alpine

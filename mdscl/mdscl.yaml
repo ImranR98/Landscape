@@ -17,9 +17,9 @@ spec:
         app: mdscl
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: $UID
+        runAsGroup: $UID
+        fsGroup: $UID
       containers:
         - name: mdscl-camera
           image: imranrdev/media-date-standardize-copy-loop:latest

@@ -16,8 +16,8 @@ spec:
         app: dscpln-parsebalx
     spec:
       securityContext:
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsGroup: $UID
+        fsGroup: $UID
       containers:
         - name: dscpln
           image: imranrdev/dscpln:latest

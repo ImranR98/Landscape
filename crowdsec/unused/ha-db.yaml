@@ -25,9 +25,9 @@ spec:
         app: crowdsec-db
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        runAsUser: $UID
+        runAsGroup: $UID
+        fsGroup: $UID
       containers:
         - name: crowdsec-db
           image: postgres:latest
