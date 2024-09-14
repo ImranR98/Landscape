@@ -20,6 +20,10 @@ export SERVICES_TLS_NAME="$(echo "$SERVICES_TOP_DOMAIN" | sed 's/\./-/g')"
 export PROXY_USER="admin"
 export PROXY_HOST="staging.example.org"
 export PROXY_SSH_STRING="$PROXY_USER"@"$PROXY_HOST"
+export PROXY_HOME="/home/$PROXY_USER"
+if [ "$PROXY_USER" = root ]; then
+    export PROXY_HOME="/root"
+fi
 
 export DOMAIN_OWNER_EMAIL="contact@example.org"
 
