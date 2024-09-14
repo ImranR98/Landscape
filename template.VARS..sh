@@ -31,6 +31,9 @@ export CLOUDFLARE_TOKEN="token_here"
 
 export NTFY_SERVICE_USER_TOKEN="token_here" # Generated through Ntfy CLI after initial setup
 
+export IMMICH_OAUTH_CLIENT_SECRET="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+export IMMICH_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+
 export AUTHELIA_USERS_DATABASE="users:
       admin:
         disabled: false
@@ -39,23 +42,20 @@ export AUTHELIA_USERS_DATABASE="users:
         email: contact@$SERVICES_TOP_DOMAIN
         groups:
           - admins" # docker run -it authelia/authelia:latest authelia crypto hash generate argon2
-export AUTHELIA_DB_ENCRYPTION_KEY="abc" # echo $RAND | sha256sum | awk '{print $1}'
-export AUTHELIA_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
-export AUTHELIA_REDIS_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export AUTHELIA_DB_ENCRYPTION_KEY="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+export AUTHELIA_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+export AUTHELIA_REDIS_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export AUTHELIA_SUBDOMAIN="auth.staging"
 export AUTHELIA_TOP_DOMAIN="$SERVICES_TOP_DOMAIN"
-export AUTHELIA_OIDC_HMAC_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export AUTHELIA_OIDC_HMAC_SECRET="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               abc
               -----END PRIVATE KEY-----" #openssl genrsa -out private.pem 2048 # openssl rsa -in private.pem -outform PEM -pubout -out public.pem
-export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc' # docker run authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
+export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc' # docker run authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986 "$IMMICH_OAUTH_CLIENT_SECRET"
 
-export CROWDSEC_BOUNCER_KEY="abc" # echo $RAND | sha256sum | awk '{print $1}'
-export CROWDSEC_LAPI_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
-export CROWDSEC_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
-
-export IMMICH_OAUTH_CLIENT_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
-export IMMICH_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export CROWDSEC_BOUNCER_KEY="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+export CROWDSEC_LAPI_SECRET="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
+export CROWDSEC_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 
 export OPENCANARY_NTFY_OFFICIAL_TOPIC="abc123"
 
@@ -69,11 +69,11 @@ export MOSQUITTO_CERTIFICATE="-----BEGIN CERTIFICATE-----
     -----END CERTIFICATE-----"
 export MOSQUITTO_CREDENTIALS='admin:abc'
 
-export NEXTCLOUD_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export NEXTCLOUD_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export NEXTCLOUD_ADMIN_USER="admin"
 export NEXTCLOUD_ADMIN_PASSWORD="abc"
 
-export PLAUSIBLE_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export PLAUSIBLE_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export PLAUSIBLE_SECRET_KEY="abc" # openssl rand -base64 48
 export PLAUSIBLE_TOTP_VAULT_KEY="abc" # openssl rand -base64 32
 
