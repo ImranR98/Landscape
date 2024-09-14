@@ -3,3 +3,5 @@
 .bitmonero/*.bin
 .bitmonero/*.crt
 .bitmonero/*.key
+config/
+.stfolder
