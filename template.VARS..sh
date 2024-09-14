@@ -31,9 +31,15 @@ export CLOUDFLARE_TOKEN="token_here"
 
 export NTFY_SERVICE_USER_TOKEN="token_here"
 
-export AUTHELIA_ADMIN_DISPLAYNAME="Admin"
-export AUTHELIA_ADMIN_PASSWORD_HASH='$argon2id$v=19$m=65536,t=3,p=abc'
-export AUTHELIA_ADMIN_EMAIL="contact@example.org"
+export AUTHELIA_USERS_DATABASE="users:
+      admin:
+        disabled: false
+        displayname: \"Admin\"
+        password: \"\$argon2id\$v=19\$m=65536,t=3,p=abc\"  # yamllint disable-line rule:line-length
+        email: contact@$SERVICES_TOP_DOMAIN
+        groups:
+          - admins
+          - dev"
 export AUTHELIA_DB_ENCRYPTION_KEY="abc"
 export AUTHELIA_DB_PASSWORD="abc"
 export AUTHELIA_REDIS_PASSWORD="abc"
@@ -47,9 +53,12 @@ export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc'
 
 export CROWDSEC_BOUNCER_KEY="abc"
 export CROWDSEC_LAPI_SECRET="abc"
+export CROWDSEC_DB_PASSWORD="abc"
 
 export IMMICH_OAUTH_CLIENT_SECRET="abc"
 export IMMICH_DB_PASSWORD="abc"
+
+export OPENCANARY_NTFY_OFFICIAL_TOPIC="abc123"
 
 export MONEROD_RPC_LOGIN="admin:abc"
 
