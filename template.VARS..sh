@@ -29,34 +29,33 @@ export DOMAIN_OWNER_EMAIL="contact@example.org"
 
 export CLOUDFLARE_TOKEN="token_here"
 
-export NTFY_SERVICE_USER_TOKEN="token_here"
+export NTFY_SERVICE_USER_TOKEN="token_here" # Generated through Ntfy CLI after initial setup
 
 export AUTHELIA_USERS_DATABASE="users:
       admin:
         disabled: false
         displayname: \"Admin\"
-        password: \"\$argon2id\$v=19\$m=65536,t=3,p=abc\"  # yamllint disable-line rule:line-length
+        password: \"\$argon2id\$v=19\$m=65536,t=3,p=abc\" # yamllint disable-line rule:line-length
         email: contact@$SERVICES_TOP_DOMAIN
         groups:
-          - admins
-          - dev"
-export AUTHELIA_DB_ENCRYPTION_KEY="abc"
-export AUTHELIA_DB_PASSWORD="abc"
-export AUTHELIA_REDIS_PASSWORD="abc"
+          - admins" # docker run -it authelia/authelia:latest authelia crypto hash generate argon2
+export AUTHELIA_DB_ENCRYPTION_KEY="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export AUTHELIA_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export AUTHELIA_REDIS_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
 export AUTHELIA_SUBDOMAIN="auth.staging"
 export AUTHELIA_TOP_DOMAIN="$SERVICES_TOP_DOMAIN"
-export AUTHELIA_OIDC_HMAC_SECRET="abc"
+export AUTHELIA_OIDC_HMAC_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
 export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               abc
-              -----END PRIVATE KEY-----"
-export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc'
+              -----END PRIVATE KEY-----" #openssl genrsa -out private.pem 2048 # openssl rsa -in private.pem -outform PEM -pubout -out public.pem
+export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc' # docker run authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986
 
-export CROWDSEC_BOUNCER_KEY="abc"
-export CROWDSEC_LAPI_SECRET="abc"
-export CROWDSEC_DB_PASSWORD="abc"
+export CROWDSEC_BOUNCER_KEY="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export CROWDSEC_LAPI_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export CROWDSEC_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
 
-export IMMICH_OAUTH_CLIENT_SECRET="abc"
-export IMMICH_DB_PASSWORD="abc"
+export IMMICH_OAUTH_CLIENT_SECRET="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export IMMICH_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
 
 export OPENCANARY_NTFY_OFFICIAL_TOPIC="abc123"
 
@@ -64,20 +63,18 @@ export MONEROD_RPC_LOGIN="admin:abc"
 
 export MOSQUITTO_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
     abc
-    -----END PRIVATE KEY-----"
+    -----END PRIVATE KEY-----" # openssl req  -nodes -new -x509  -keyout private_key.pem -out certificate.pem -subj "/C=CA/ST=Toronto/L=Toronto/O=$SERVICES_TOP_DOMAIN/OU=Main/CN=$SERVICES_TOP_DOMAIN"
 export MOSQUITTO_CERTIFICATE="-----BEGIN CERTIFICATE-----
     abc
     -----END CERTIFICATE-----"
 export MOSQUITTO_CREDENTIALS='admin:abc'
 
-export NEXTCLOUD_DB_PASSWORD="abc"
+export NEXTCLOUD_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
 export NEXTCLOUD_ADMIN_USER="admin"
 export NEXTCLOUD_ADMIN_PASSWORD="abc"
 
-export PLAUSIBLE_DB_PASSWORD="abc"
-export PLAUSIBLE_SECRET_KEY="abc"
-export PLAUSIBLE_TOTP_VAULT_KEY="abc"
+export PLAUSIBLE_DB_PASSWORD="abc" # echo $RAND | sha256sum | awk '{print $1}'
+export PLAUSIBLE_SECRET_KEY="abc" # openssl rand -base64 48
+export PLAUSIBLE_TOTP_VAULT_KEY="abc" # openssl rand -base64 32
 
 export STRELAYSRV_PROVIDED_BY_TEXT="example.org"
-
-# TODO: Provide instructions on how to generate some of these (or provide links to app-specific docs)
