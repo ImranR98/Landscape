@@ -60,6 +60,7 @@ postgresql:
     podSecurityContext:
       fsGroup: $MY_UID
     containerSecurityContext:
+      runAsUser: $MY_UID
       runAsGroup: $MY_UID
 
 redis:
