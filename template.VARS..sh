@@ -8,6 +8,7 @@ export PROXY_NODE_HOSTNAME="proxy"
 export MAIN_NODE_HOSTNAME_LOWERCASE="${MAIN_NODE_HOSTNAME,,}"
 export PROXY_NODE_HOSTNAME_LOWERCASE="${PROXY_NODE_HOSTNAME,,}"
 export STATE_DIR="$HERE/state"
+export HELPERS_PATH="$HERE/helpers.sh"
 export MAIN_PARENT_DIR="$HERE/mock-data"
 export ADMIN_PUBLIC_SSH_KEY="ssh-ed25519 abcdefg admin@home"
 
