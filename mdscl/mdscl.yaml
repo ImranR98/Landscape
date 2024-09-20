@@ -31,6 +31,10 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Camera
+          securityContext:
+            allowPrivilegeEscalation: false
+            seLinuxOptions:
+              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"
@@ -46,6 +50,10 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Screenshots
+          securityContext:
+            allowPrivilegeEscalation: false
+            seLinuxOptions:
+              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"
@@ -61,6 +69,10 @@ spec:
             - name: media
               mountPath: /destination
               subPath: Screenshots
+          securityContext:
+            allowPrivilegeEscalation: false
+            seLinuxOptions:
+              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"
