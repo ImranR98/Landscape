@@ -20,8 +20,8 @@ immich:
     enabled: false
   persistence:
     library:
-      existingClaim: immich-pvc
-  # configuration:
+      existingClaim: immich-server-pvc
+  configuration: {}
   #   oauth:
   #     autoLaunch: true
   #     autoRegister: true
@@ -55,7 +55,7 @@ postgresql:
           CREATE EXTENSION vectors;
     persistence:
       enabled: true
-      existingClaim: immich-pvc
+      existingClaim: immich-main-pvc
       subPath: "postgres"
     podSecurityContext:
       fsGroup: $MY_UID
@@ -71,7 +71,7 @@ redis:
   master:
     persistence:
       enabled: true
-      existingClaim: immich-pvc
+      existingClaim: immich-main-pvc
       subPath: "redis"
     podSecurityContext:
       fsGroup: $MY_UID
