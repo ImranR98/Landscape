@@ -14,7 +14,9 @@ podSecurityContext:
 securityContext:
   runAsUser: $MY_UID
   runAsGroup: $MY_UID
-  privileged: true # SELinux may cause issues with file watching/reading for external libraries
+  allowPrivilegeEscalation: false
+  seLinuxOptions:
+    type: spc_t # SELinux may cause issues with file watching/reading for external libraries
 
 immich:
   metrics:
