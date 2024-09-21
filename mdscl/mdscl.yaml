@@ -23,7 +23,6 @@ spec:
       containers:
         - name: mdscl-camera
           image: imranrdev/media-date-standardize-copy-loop:latest
-          imagePullPolicy: Always
           volumeMounts:
             - name: phonesync
               mountPath: /source
@@ -42,7 +41,6 @@ spec:
               value: $NTFY_SERVICE_USER_TOKEN
         - name: mdscl-screenshots
           image: imranrdev/media-date-standardize-copy-loop:latest
-          imagePullPolicy: Always
           volumeMounts:
             - name: phonesync
               mountPath: /source
@@ -61,7 +59,6 @@ spec:
               value: $NTFY_SERVICE_USER_TOKEN
         - name: mdscl-screenrecs
           image: imranrdev/media-date-standardize-copy-loop:latest
-          imagePullPolicy: Always
           volumeMounts:
             - name: phonesync
               mountPath: /source

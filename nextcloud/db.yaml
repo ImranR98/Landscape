@@ -31,7 +31,6 @@ spec:
       containers:
         - name: nextcloud-db
           image: postgres:16-alpine
-          imagePullPolicy: Always
           ports:
             - containerPort: 5432
           envFrom:

@@ -21,7 +21,6 @@ spec:
       containers:
         - name: dscpln
           image: imranrdev/dscpln:latest
-          imagePullPolicy: Always
           ports:
             - containerPort: 3300
           volumeMounts:
@@ -43,7 +42,6 @@ spec:
               value: "1400"
         - name: parsebalx
           image: imranrdev/parsebalx:latest
-          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           volumeMounts:
