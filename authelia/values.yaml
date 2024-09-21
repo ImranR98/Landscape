@@ -3,9 +3,6 @@
 #       should not be protected by Authelia once fully set up, but should be protected before
 #       some manual step is taken (usually manual creation of an admin account).
 
-image:
-  pullPolicy: Always
-
 pod:
   kind: DaemonSet
   extraVolumeMounts:
