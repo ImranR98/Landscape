@@ -12,7 +12,7 @@ pod:
   extraVolumes:
     - name: users-database
       secret:
-        secretName: users-database
+        secretName: authelia-users
         items:
           - key: users-database.yaml
             path: users-database.yaml
