@@ -28,9 +28,6 @@ spec:
         runAsUser: $MY_UID
         runAsGroup: $MY_UID
         fsGroup: $MY_UID
-        allowPrivilegeEscalation: false
-        seLinuxOptions:
-          type: spc_t # SELinux may cause issues with file watching/reading for external libraries
       containers:
         - name: crowdsec-db
           image: postgres:latest
@@ -43,6 +40,10 @@ spec:
             - mountPath: /var/lib/postgresql/data
               name: crowdsec-volume
               subPath: db
+          securityContext:
+            allowPrivilegeEscalation: false
+            seLinuxOptions:
+              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
       volumes:
         - name: crowdsec-volume
           persistentVolumeClaim:

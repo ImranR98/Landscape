@@ -28,9 +28,6 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
-        allowPrivilegeEscalation: false
-        seLinuxOptions:
-          type: spc_t # SELinux may cause issues with file watching/reading for external libraries
       containers:
         - name: plausible-db
           image: postgres:16-alpine
@@ -43,6 +40,10 @@ spec:
             - mountPath: /var/lib/postgresql/data
               name: plausible-volume
               subPath: db
+          securityContext:
+            allowPrivilegeEscalation: false
+            seLinuxOptions:
+              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
       volumes:
         - name: plausible-volume
           persistentVolumeClaim:
