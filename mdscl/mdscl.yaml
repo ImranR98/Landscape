@@ -33,7 +33,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             seLinuxOptions:
-              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
+              type: spc_t # SELinux doesn't play well with K8s PVCs
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"
@@ -51,7 +51,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             seLinuxOptions:
-              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
+              type: spc_t # SELinux doesn't play well with K8s PVCs
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"
@@ -69,7 +69,7 @@ spec:
           securityContext:
             allowPrivilegeEscalation: false
             seLinuxOptions:
-              type: spc_t # SELinux may cause issues with file watching/reading for external libraries
+              type: spc_t # SELinux doesn't play well with K8s PVCs
           env:
             - name: NTFY_URL
               value: "https://ntfy.$SERVICES_DOMAIN/${MAIN_NODE_HOSTNAME_LOWERCASE}_services_mdscl_errors"

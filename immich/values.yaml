@@ -1,5 +1,5 @@
 env:
-  REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
+  REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}.production.svc.cluster.local'
   DB_HOSTNAME: "{{ .Release.Name }}-postgresql"
   DB_USERNAME: "{{ .Values.postgresql.global.postgresql.auth.username }}"
   DB_DATABASE_NAME: "{{ .Values.postgresql.global.postgresql.auth.database }}"
@@ -16,7 +16,7 @@ securityContext:
   runAsGroup: $MY_UID
   allowPrivilegeEscalation: false
   seLinuxOptions:
-    type: spc_t # SELinux may cause issues with file watching/reading for external libraries
+    type: spc_t # SELinux doesn't play well with K8s PVCs
 
 immich:
   metrics:
@@ -67,7 +67,7 @@ postgresql:
       runAsGroup: $MY_UID
       allowPrivilegeEscalation: false
       seLinuxOptions:
-        type: spc_t # SELinux may cause issues with file watching/reading for external libraries
+        type: spc_t # SELinux doesn't play well with K8s PVCs
 
 redis:
   enabled: true
@@ -75,6 +75,11 @@ redis:
   auth:
     enabled: false
   master:
+    resourcesPreset: 2xlarge
+    livenessProbe:
+      failureThreshold: 1360
+    readinessProbe:
+      failureThreshold: 1360
     persistence:
       enabled: true
       existingClaim: immich-main-pvc
@@ -84,6 +89,9 @@ redis:
     containerSecurityContext:
       runAsUser: $MY_UID
       runAsGroup: $MY_UID
+      allowPrivilegeEscalation: false
+      seLinuxOptions:
+        type: spc_t # SELinux doesn't play well with K8s PVCs
 
 server:
   enabled: true
