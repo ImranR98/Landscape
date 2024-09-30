@@ -107,6 +107,7 @@ configMap:
   totp:
     issuer: $SERVICES_TOP_DOMAIN
   access_control:
+    default_policy: 'deny'
     rules:
       - domain: tv.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
@@ -150,10 +151,12 @@ configMap:
         policy: bypass
       - domain: plausible.$SERVICES_DOMAIN # IGNORE INITIALLY
         policy: bypass # IGNORE INITIALLY
+      - domain: ytdl.$SERVICES_DOMAIN
+        policy: one_factor
+        subject:
+        - ['group:family']
       - domain: '*.$SERVICES_TOP_DOMAIN'
         policy: two_factor
-        subject:
-          - 'group:admins'
   regulation:
     max_retries: 3
     find_time: 120
