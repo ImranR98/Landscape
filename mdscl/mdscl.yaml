@@ -62,7 +62,7 @@ spec:
           volumeMounts:
             - name: phonesync
               mountPath: /source
-              subPath: "Screen Recordings"
+              subPath: "ScreenRecs"
             - name: media
               mountPath: /destination
               subPath: Screenshots
@@ -81,4 +81,4 @@ spec:
             claimName: main-media-pvc
         - name: phonesync
           persistentVolumeClaim:
-            claimName: phone-sync-folders-pvc
+            claimName: device-sync-folders-pvc

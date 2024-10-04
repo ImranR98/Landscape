@@ -5,3 +5,4 @@
 .bitmonero/*.key
 config/
 .stfolder
+devicesSync/
