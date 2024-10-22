@@ -58,10 +58,6 @@ export MOSQUITTO_CERTIFICATE="-----BEGIN CERTIFICATE-----
     -----END CERTIFICATE-----"
 export MOSQUITTO_CREDENTIALS='admin:abc'
 
-export NEXTCLOUD_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
-export NEXTCLOUD_ADMIN_USER="admin"
-export NEXTCLOUD_ADMIN_PASSWORD="abc"
-
 export PLAUSIBLE_DB_PASSWORD="abc"    # echo $RANDOM | sha256sum | awk '{print $1}'
 export PLAUSIBLE_SECRET_KEY="abc"     # openssl rand -base64 48
 export PLAUSIBLE_TOTP_VAULT_KEY="abc" # openssl rand -base64 32
