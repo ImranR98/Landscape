@@ -57,6 +57,7 @@ config:
       headers:
         Authorization: Bearer $NTFY_SERVICE_USER_TOKEN
         Title: Crowdsec on ${MAIN_NODE_HOSTNAME}
+        Priority: min
 
 container_runtime: containerd
 
