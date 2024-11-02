@@ -7,7 +7,7 @@ env:
   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
 
 image:
-  tag: v1.118.2 # TODO: 119 has issues
+  tag: release
 
 podSecurityContext:
   fsGroup: $MY_UID
@@ -50,6 +50,7 @@ postgresql:
         database: immich
         password: $IMMICH_DB_PASSWORD
   primary:
+    resourcesPreset: 2xlarge
     initdb:
       scripts:
         create-extensions.sql: |
@@ -115,6 +116,10 @@ server:
       enabled: true
       existingClaim: main-media-pvc
       readOnly: false
+  probes:
+    startup:
+      spec:
+        failureThreshold: 360
 
 machine-learning:
   enabled: true
