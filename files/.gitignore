@@ -1,3 +1,5 @@
+landscape.docker-compose.yaml
+landscape.service
+landscape.service.temp
 frps-tokens.txt
 frps.service
-landscape.service

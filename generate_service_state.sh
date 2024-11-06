@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source ""$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)""/init_vars.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)"/init_vars.sh
 
 # Ensure state dirs exist
 for dir in $(grep -Eo '\$STATE_DIR[^:]+:' "$(here)"/docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$'); do
