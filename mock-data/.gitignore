@@ -1,8 +1,0 @@
-.bitmonero/lmdb
-.bitmonero/*.log
-.bitmonero/*.bin
-.bitmonero/*.crt
-.bitmonero/*.key
-config/
-.stfolder
-devicesSync/
