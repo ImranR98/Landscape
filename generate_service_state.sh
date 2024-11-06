@@ -3,13 +3,14 @@ set -e
 
 source ""$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)""/init_vars.sh
 
-echo $STATE_DIR
-STATE_DIR="${STATE_DIR}_docker" # TODO: Temporary
-
 # Ensure state dirs exist
 for dir in $(grep -Eo '\$STATE_DIR[^:]+:' "$(here)"/docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$'); do
     mkdir -p "$STATE_DIR/$(echo $dir | tail -c +12)"
 done
+mkdir -p "$STATE_DIR"/logtfy
+mkdir -p "$STATE_DIR"/prometheus
+mkdir -p "$STATE_DIR"/opencanary
+mkdir -p "$STATE_DIR"/filebrowser
 
 # Generate required config files
 cat "$(here)"/files/logtfy.json | envsubst >"$STATE_DIR"/logtfy/config.json
