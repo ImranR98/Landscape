@@ -4,7 +4,7 @@ set -e
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)"/init_vars.sh
 
 # Ensure state dirs exist
-for dir in $(grep -Eo '\$STATE_DIR[^:]+:' "$(here)"/docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$'); do
+for dir in $(grep -Eo '\$STATE_DIR[^:]+:' "$(here)"/landscape.docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$'); do
     mkdir -p "$STATE_DIR/$(echo $dir | tail -c +12)"
 done
 mkdir -p "$STATE_DIR"/logtfy
@@ -29,6 +29,8 @@ touch "$STATE_DIR"/filebrowser/filebrowser.db
 cat "$(here)"/files/filebrowser.json | envsubst >"$STATE_DIR"/filebrowser/filebrowser.json
 cat "$(here)"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/server.yml
 cat "$(here)"/files/mosquitto.conf | envsubst >"$STATE_DIR"/mosquitto/config/mosquitto.conf
+cp "$(here)"/files/hwaccel.ml.yml "$STATE_DIR"/immich
+cp "$(here)"/files/hwaccel.transcoding.yml "$STATE_DIR"/immich
 echo "$MOSQUITTO_PRIVATE_KEY" >"$STATE_DIR"/mosquitto/config/private_key.pem
 echo "$MOSQUITTO_CERTIFICATE" >"$STATE_DIR"/mosquitto/config/certificate.pem
 echo "$MOSQUITTO_CREDENTIALS" >"$STATE_DIR"/mosquitto/config/password_file
