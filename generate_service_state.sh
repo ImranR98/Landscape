@@ -17,8 +17,8 @@ mkdir -p "$STATE_DIR"/filebrowser
 
 # Generate required config files
 cat "$(here)"/files/logtfy.json | envsubst >"$STATE_DIR"/logtfy/config.json
-cat "$(here)"/files/authelia.config.yaml | envsubst >"$STATE_DIR"/authelia/config/configuration.yaml
-echo "$$AUTHELIA_USERS_DATABASE" >"$STATE_DIR"/authelia/config/users_database.yaml
+cat "$(here)"/files/authelia.config.yaml | envsubst >"$STATE_DIR"/authelia/config/configuration.yml
+echo "$AUTHELIA_USERS_DATABASE" >"$STATE_DIR"/authelia/config/users_database.yml
 if [ ! -f "$STATE_DIR"/traefik/acme.json ]; then
     echo '[]' >"$STATE_DIR"/traefik/acme.json
 fi
