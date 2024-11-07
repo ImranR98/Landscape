@@ -73,7 +73,7 @@ services:
         container_name: frpc
         restart: always
         volumes:
-        - $STATE_DIR/frpc.ini:/frpc.ini
+        - $STATE_DIR/frpc/frpc.ini:/frpc.ini
         network_mode: host
 
     # Monero node
