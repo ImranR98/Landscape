@@ -97,7 +97,7 @@ StartLimitIntervalSec=0
 [Service]
 User=$USER_ID
 Type=idle
-ExecStart=/usr/bin/docker compose -f path_to_here/$SERVICE_NAME.docker-compose.yaml up
+ExecStart=/usr/bin/docker compose -p $SERVICE_NAME -f path_to_here/$SERVICE_NAME.docker-compose.yaml up
 Restart=always
 RestartSec=30
 

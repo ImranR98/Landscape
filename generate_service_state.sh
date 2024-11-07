@@ -14,6 +14,7 @@ mkdir -p "$STATE_DIR"/logtfy
 mkdir -p "$STATE_DIR"/prometheus
 mkdir -p "$STATE_DIR"/opencanary
 mkdir -p "$STATE_DIR"/filebrowser
+mkdir -p "$STATE_DIR"/plausible
 
 # Generate required config files
 cat "$(here)"/files/logtfy.json | envsubst >"$STATE_DIR"/logtfy/config.json
@@ -31,8 +32,10 @@ cat "$(here)"/files/opencanary.json | envsubst >"$STATE_DIR"/opencanary/opencana
 touch "$STATE_DIR"/filebrowser/filebrowser.db
 cat "$(here)"/files/filebrowser.json | envsubst >"$STATE_DIR"/filebrowser/filebrowser.json
 cat "$(here)"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/server.yml
-cp "$(here)"/files/hwaccel.ml.yml "$STATE_DIR"/immich
-cp "$(here)"/files/hwaccel.transcoding.yml "$STATE_DIR"/immich
+cp "$(here)"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
+cp "$(here)"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
+cp "$(here)"/files/plausible.logs.xml "$STATE_DIR"/plausible/logs.xml
+cp "$(here)"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/ipv4-only.xml
 cat "$(here)"/files/mosquitto.conf | envsubst | sudo dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
 echo "$MOSQUITTO_PRIVATE_KEY" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
 echo "$MOSQUITTO_CERTIFICATE" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
