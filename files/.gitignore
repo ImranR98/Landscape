@@ -3,3 +3,6 @@ landscape.service
 landscape.service.temp
 frps-tokens.txt
 frps.service
+frpc.ini
+frpc-preboot.ini
+temp_code.txt
