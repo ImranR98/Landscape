@@ -33,6 +33,8 @@ export AUTHELIA_USERS_DATABASE="users:
           - admins"                     # docker run -it authelia/authelia:latest authelia crypto hash generate argon2
 export AUTHELIA_DB_ENCRYPTION_KEY="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export AUTHELIA_DB_PASSWORD="abc"       # echo $RANDOM | sha256sum | awk '{print $1}'
+export AUTHELIA_SESSION_SECRET="abc"    # echo $RANDOM | sha256sum | awk '{print $1}'
+export AUTHELIA_JWT_SECRET="abc"        # echo $RANDOM | sha256sum | awk '{print $1}'
 export AUTHELIA_REDIS_PASSWORD="abc"    # echo $RANDOM | sha256sum | awk '{print $1}'
 export AUTHELIA_SUBDOMAIN="auth.staging"
 export AUTHELIA_TOP_DOMAIN="$SERVICES_TOP_DOMAIN"
