@@ -14,6 +14,7 @@ scp "$HERE_M3U8"/files/frps.service "$PROXY_SSH_STRING":~/frps/frps.service
 scp "$HERE_M3U8"/files/frps.install.sh "$PROXY_SSH_STRING":~/frps/install.sh
 scp "$HERE_M3U8"/files/openTCPPort.sh "$PROXY_SSH_STRING":~/frps/openTCPPort.sh
 rm "$HERE_M3U8"/files/frps.service
+rm "$HERE_M3U8"/files/frps-tokens.txt
 ssh -A -t "$PROXY_SSH_STRING" bash -l <<-EOF
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
