@@ -51,7 +51,7 @@ cat "$HERE_LX1A"/files/crowdsec.profiles.yaml | envsubst >"$STATE_DIR"/crowdsec/
 cat "$HERE_LX1A"/files/opencanary.json | envsubst >"$STATE_DIR"/opencanary/opencanary.json
 touch "$STATE_DIR"/filebrowser/filebrowser.db
 cat "$HERE_LX1A"/files/filebrowser.json | envsubst >"$STATE_DIR"/filebrowser/filebrowser.json
-cat "$HERE_LX1A"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/server.yml
+cat "$HERE_LX1A"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/etc/server.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
 cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/logs.xml
@@ -106,6 +106,22 @@ if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
     export CROWDSEC_BOUNCER_KEY="$(docker exec crowdsec cscli bouncers add crowdsecBouncer | head -3 | tail -1 | awk '{print $1}')"
     echo "export CROWDSEC_BOUNCER_KEY='$CROWDSEC_BOUNCER_KEY'" >>"$STATE_DIR"/generated.VARS.sh
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down crowdsec
+fi
+
+# If no Ntfy service account token has been defined, start Ntfy, create a service user, and save the token
+if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
+    docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d ntfy
+    echo "Waiting for Ntfy to start..."
+    sleep 10 # Hopefully enough time for any initialization to occur
+    SERVICES_USER="${MAIN_NODE_HOSTNAME_LOWERCASE}_services"
+    SERVICES_TOPIC="${SERVICES_USER}_*"
+    docker exec ntfy ntfy user del "$SERVICES_USER" 2>/dev/null || :
+    docker exec ntfy sh -c "NTFY_PASSWORD=\"$NTFY_SERVICES_PASSWORD\" ntfy user add \"$SERVICES_USER\""
+    docker exec ntfy ntfy access "$SERVICES_USER" "$SERVICES_TOPIC" wo
+    docker exec ntfy ntfy access "$SERVICES_USER" "$PIXELNTFY_TOPIC_SUFFIX" wo
+    export NTFY_SERVICE_USER_TOKEN="$(docker exec ntfy ntfy token add "$SERVICES_USER" 2>&1 | awk '{print $2}')"
+    echo "export NTFY_SERVICE_USER_TOKEN='$NTFY_SERVICE_USER_TOKEN'" >>"$STATE_DIR"/generated.VARS.sh
+    docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down ntfy
 fi
 
 # Re-generate the compose file to account for any env. var. changes

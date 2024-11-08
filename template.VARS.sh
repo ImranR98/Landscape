@@ -18,7 +18,7 @@ export DOMAIN_OWNER_EMAIL="contact@example.org"
 
 export CLOUDFLARE_TOKEN="token_here"
 
-export NTFY_SERVICE_USER_TOKEN="token_here" # Generated through Ntfy CLI after initial setup
+export NTFY_SERVICES_PASSWORD="password"
 
 export IMMICH_OAUTH_CLIENT_SECRET="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export IMMICH_DB_PASSWORD="abc"         # echo $RANDOM | sha256sum | awk '{print $1}'
