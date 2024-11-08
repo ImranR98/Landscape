@@ -57,9 +57,11 @@ awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STA
 awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/landscape.service.temp > "$STATE_DIR"/landscape.service
 rm "$STATE_DIR"/landscape.service.temp
 
-sudo mv "$HERE_LX1A"/files/landscape.service /etc/systemd/system/landscape.service
-sudo systemctl daemon-reload
-sudo systemctl enable landscape.service
-sudo systemctl stop landscape.service || :
-sleep 5
-sudo systemctl start landscape.service
+# sudo mv "$HERE_LX1A"/files/landscape.service /etc/systemd/system/landscape.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable landscape.service
+# sudo systemctl stop landscape.service || :
+# sleep 5
+# sudo systemctl start landscape.service
+
+# TODO: If crowdsec bouncer key is undefined, generate one from the (hopefully running) container, save it to a file in state/, then restart that service. Also read from state file instead of env var.
