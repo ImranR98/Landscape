@@ -122,6 +122,8 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.authelia.rule=Host(`auth.$SERVICES_DOMAIN`)"
             - "traefik.http.routers.authelia.entryPoints=websecure"
+            - "traefik.http.routers.authelia.tls.certresolver=le"
+            - "traefik.http.routers.authelia.tls=true"
             - "traefik.http.routers.authelia.middlewares=geoblock@file"
             - "traefik.http.middlewares.authelia.forwardAuth.address=http://authelia:9091/api/verify?rd=https%3A%2F%2Fauth.$SERVICES_DOMAIN%2F"
             - "traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader=true"
