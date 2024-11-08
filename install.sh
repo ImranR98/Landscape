@@ -68,6 +68,13 @@ if [ ! -f "$STATE_DIR"/frpc/frpc.ini ]; then
     bash "$HERE_LX1A"/files/frpc.generate.sh
     mv "$HERE_LX1A"/files/frpc.ini "$STATE_DIR"/frpc
 fi
+if [ ! -d "$STATE_DIR"/crowdsec/dashboard-db/metabase.db ]; then
+    echo "Grabbing Crowdsec dashboard Metabase file..."
+    wget https://crowdsec-statics-assets.s3-eu-west-1.amazonaws.com/metabase_sqlite.zip -O "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip
+    unzip "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip -d "$STATE_DIR"/crowdsec/dashboard-db/
+    rm "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip
+    echo "Note: Crowdsec dashboard credentials are 'crowdsec@crowdsec.net' and '!!Cr0wdS3c_M3t4b4s3??'"
+fi
 
 # Generate compose file
 cat "$HERE_LX1A"/landscape.docker-compose.yaml | envsubst >"$STATE_DIR"/landscape.docker-compose.yaml
@@ -107,6 +114,4 @@ cat "$HERE_LX1A"/landscape.docker-compose.yaml | envsubst >"$STATE_DIR"/landscap
 # Start the service
 sudo systemctl daemon-reload
 sudo systemctl enable landscape.service
-sudo systemctl stop landscape.service || :
-sleep 5
-sudo systemctl start landscape.service
+sudo systemctl start landscape.service # TODO: DO NOT STOP FRPC IF IT IS RUNNING

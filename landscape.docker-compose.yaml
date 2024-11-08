@@ -275,7 +275,7 @@ services:
             - "traefik.http.routers.prometheus.service=prometheus"
             - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
         restart: unless-stopped
-    grafana:
+    grafana: # Add the Prometheus datasource (https://prometheus:9090) then import this dashboard: https://grafana.com/grafana/dashboards/17346-traefik-official-standalone-dashboard/
         image: grafana/grafana
         container_name: grafana
         depends_on:
