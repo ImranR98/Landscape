@@ -156,7 +156,7 @@ services:
             - "--api.insecure=false"
             - "--global.sendAnonymousUsage=false"
             - "--global.checkNewVersion=true"
-            - "--log.level=INFO"
+            - "--log.level=DEBUG"
             - "--accesslog=true"
             - "--accesslog.filePath=/var/log/traefik/access.log"
             - "--metrics.prometheus=true"
@@ -391,7 +391,6 @@ services:
         image: filebrowser/filebrowser
         restart: unless-stopped
         depends_on:
-            - authelia
             - traefik
         user: "1000:1000"
         volumes:
@@ -420,7 +419,6 @@ services:
         image: registry.gitlab.com/timvisee/send:latest
         restart: unless-stopped
         depends_on:
-            - authelia
             - traefik
             - send-db
         volumes:
@@ -457,7 +455,6 @@ services:
         container_name: jellyfin
         image: jellyfin/jellyfin
         depends_on:
-            - authelia
             - traefik
         user: "1000:1000"
         volumes:
@@ -484,7 +481,6 @@ services:
         container_name: ntfy
         user: "1000:1000"
         depends_on:
-            - authelia
             - traefik
         command:
             - "serve"
@@ -509,7 +505,6 @@ services:
         container_name: pixelntfy
         image: imranrdev/pixel-ntfy
         depends_on:
-            - authelia
             - traefik
         labels:
             - "traefik.enable=true"
@@ -532,7 +527,6 @@ services:
         container_name: dscpln
         image: imranrdev/dscpln
         depends_on:
-            - authelia
             - traefik
             - ntfy
         labels:
@@ -561,7 +555,6 @@ services:
         container_name: parsebalx
         image: imranrdev/parsebalx
         depends_on:
-            - authelia
             - traefik
         labels:
             - "traefik.enable=true"
@@ -582,7 +575,6 @@ services:
         container_name: isbn-lookup
         image: imranrdev/isbn-lookup
         depends_on:
-            - authelia
             - traefik
         labels:
             - "traefik.enable=true"
@@ -675,7 +667,6 @@ services:
         image: louislam/uptime-kuma:latest
         restart: unless-stopped
         depends_on:
-            - authelia
             - traefik
         environment:
             - PUID=1000
@@ -821,7 +812,6 @@ services:
             - traefik
         depends_on:
             - ollama
-            - authelia
             - traefik
         restart: unless-stopped
         labels:
