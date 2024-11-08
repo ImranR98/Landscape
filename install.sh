@@ -1,6 +1,9 @@
 # TODO:
 # - Confirm everything works
 # - Remaining remote components
+#   - frpc/frpc-preboot-subcomponent
+#   - logtfy/logtfy-remote-subcomponent
+#   - strelaysrv
 # - Manual update script instead of watchtower
 # - mTLS
 # - Generally go through and optimize everything, confirm parity with existing system
@@ -60,6 +63,7 @@ cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | sudo dd status=none of="$STAT
 echo "$MOSQUITTO_PRIVATE_KEY" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
 echo "$MOSQUITTO_CERTIFICATE" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
 echo "$MOSQUITTO_CREDENTIALS" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/password_file
+echo "$WEBDAV_HTPASSWD" > "$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
     openssl genrsa -out "$STATE_DIR"/traefik/mtls/cakey.pem 4096
     openssl req -new -x509 -key "$STATE_DIR"/traefik/mtls/cakey.pem -out "$STATE_DIR"/traefik/mtls/cacert.pem

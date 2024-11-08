@@ -820,6 +820,51 @@ services:
             - "traefik.http.routers.ollama-webui.middlewares=geoblock@file"
             - "traefik.http.services.ollama-webui.loadbalancer.server.port=8080"
 
+    metube:
+        image: ghcr.io/alexta69/metube:latest
+        container_name: metube
+        volumes:
+            - $STATE_DIR/metube:/downloads
+        networks:
+            - traefik
+        depends_on:
+            - traefik
+        restart: unless-stopped
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.metube.rule=Host(`ytdl.$SERVICES_DOMAIN`)"
+            - "traefik.http.routers.metube.entrypoints=websecure"
+            - "traefik.http.routers.metube.tls.certresolver=le"
+            - "traefik.http.routers.metube.tls=true"
+            - "traefik.http.services.metube.loadbalancer.server.port=8081"
+
+    webdav:
+        image: rclone/rclone:latest
+        container_name: webdav
+        volumes:
+            - $STATE_DIR/webdav/config:/config/rclone
+            - $STATE_DIR/webdav/data:/data
+        networks:
+            - traefik
+        depends_on:
+            - traefik
+        restart: unless-stopped
+        command:
+            - "serve"
+            - "webdav"
+            - "/data"
+            - "--addr"
+            - "0.0.0.0:8080"
+            - "--htpasswd"
+            - "/config/rclone/htpasswd"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.webdav.rule=Host(`webdav.$SERVICES_DOMAIN`)"
+            - "traefik.http.routers.webdav.entrypoints=websecure"
+            - "traefik.http.routers.webdav.tls.certresolver=le"
+            - "traefik.http.routers.webdav.tls=true"
+            - "traefik.http.services.webdav.loadbalancer.server.port=8080"
+
 networks:
     traefik:
         ipam:
@@ -838,8 +883,3 @@ volumes:
     ollama-webui: {}
     navidrome-cache: {}
     immich-model-cache: {}
-
-
-# frpc/frpc-preboot-subcomponent # TODO
-# logtfy/logtfy-remote-subcomponent # TODO
-# strelaysrv # TODO
