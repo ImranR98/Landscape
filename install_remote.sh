@@ -2,7 +2,7 @@
 set -e
 
 HERE_M3U8="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)"
-source "$HERE_M3U8"/init_vars.sh
+source "$HERE_M3U8"/prep_env.sh
 
 # Install FRPS
 syncRemoteEnvFileIfUndefined "$PROXY_SSH_STRING" "$PROXY_HOME/frps/frps-tokens.txt" "$MAIN_NODE_HOSTNAME_LOWERCASE" "$(echo $RANDOM | sha512sum | awk '{print $1}')$(echo $RANDOM | sha512sum | awk '{print $1}')" "$HERE_M3U8"/files/frps-tokens.txt

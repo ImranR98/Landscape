@@ -1,8 +1,3 @@
-# TODO:
-# 3. Test on staging environment
-# 5. Go through and ensure it has parity with K8s (mTLS, etc.)
-# 6. Plan and do migration
-
 services:
     # Watchtower - Container Updater
     watchtower:

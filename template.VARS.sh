@@ -44,7 +44,6 @@ export AUTHELIA_JWKS_KEY="-----BEGIN PRIVATE KEY-----
               -----END PRIVATE KEY-----"                  #openssl genrsa -out private.pem 2048 # openssl rsa -in private.pem -outform PEM -pubout -out public.pem
 export AUTHELIA_IMMICH_CLIENT_SECRET='$pbkdf2-sha512$abc' # docker run authelia/authelia:latest authelia crypto hash generate pbkdf2 --variant sha512 --random --random.length 72 --random.charset rfc3986 "$IMMICH_OAUTH_CLIENT_SECRET"
 
-export CROWDSEC_BOUNCER_KEY="abc" # echo $RANDOM | sha256sum | awk '{print $1}' # Or in Docker: docker exec crowdsec cscli bouncers add crowdsecBouncer
 export CROWDSEC_LAPI_SECRET="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 export CROWDSEC_DB_PASSWORD="abc" # echo $RANDOM | sha256sum | awk '{print $1}'
 

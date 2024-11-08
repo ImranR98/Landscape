@@ -2,7 +2,7 @@
 set -e
 
 HERE_QC6O="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd;)"
-source "$HERE_QC6O"/../init_vars.sh
+source "$HERE_QC6O"/../prep_env.sh
 
 FRPC_USERNAME="$MAIN_NODE_HOSTNAME_LOWERCASE"
 FRPC_FILENAME=frpc
