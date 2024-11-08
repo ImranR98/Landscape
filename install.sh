@@ -88,14 +88,15 @@ if [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ] || [ -z "$(grep -Eo '^
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down homeassistant
 fi
 
-If no Crowdsec bouncer key has been defined, start Crowdsec, generate a key, and save it
+# If no Crowdsec bouncer key has been defined, start Crowdsec, generate a key, and save it
 if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d crowdsec
+    echo "Waiting for Crowdsec to start..."
     sleep 10 # Hopefully enough time for any initialization to occur
-    docker exec crowdsec cscli bouncers remove crowdsecBouncer || :
+    docker exec crowdsec cscli bouncers remove crowdsecBouncer 2>/dev/null || :
     export CROWDSEC_BOUNCER_KEY="$(docker exec crowdsec cscli bouncers add crowdsecBouncer | head -3 | tail -1 | awk '{print $1}')"
     echo "export CROWDSEC_BOUNCER_KEY='$CROWDSEC_BOUNCER_KEY'" >>"$STATE_DIR"/generated.VARS.sh
-    docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down -d crowdsec
+    docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down crowdsec
 fi
 
 # Re-generate the compose file to account for any env. var. changes

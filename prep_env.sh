@@ -17,6 +17,9 @@ else
     exit 1
 fi
 source "$HERE_L3D9"/fixed.VARS.sh
+if [ -f "$STATE_DIR"/generated.VARS.sh ]; then
+    source "$STATE_DIR"/generated.VARS.sh
+fi
 
 contains() {
     local item="$1"
