@@ -84,10 +84,18 @@ if [ ! -d "$STATE_DIR"/crowdsec/dashboard-db/metabase.db ]; then
     rm "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip
     echo "- Crowdsec dashboard initialized with email \"crowdsec@crowdsec.net\" and password \"!!Cr0wdS3c_M3t4b4s3??\""
 fi
-echo "issuerUrl: https://auth.$SERVICES_DOMAIN/.well-known/openid-configuration
-clientId: immich
-clientSecret: $IMMICH_OAUTH_CLIENT_SECRET
-autoLaunch: true" >"$STATE_DIR"/immich/oauth_info.txt
+if [ ! -f "$STATE_DIR"/immich/oauth_info.txt ]; then
+    PRINT_IMMICH_OAUTH_INFO=true
+fi
+echo "    - issuerUrl: https://auth.$SERVICES_DOMAIN/.well-known/openid-configuration
+    - clientId: immich
+    - clientSecret: $IMMICH_OAUTH_CLIENT_SECRET
+    - autoLaunch: true" >"$STATE_DIR"/immich/oauth_info.txt
+if [ -n "$PRINT_IMMICH_OAUTH_INFO" ]; then
+    echo "- Immich OAuth info for reference (must be set manually in the GUI):"
+    cat "$STATE_DIR"/immich/oauth_info.txt
+fi
+sudo chown -R root:root "$STATE_DIR"/homeassistant
 echo "Done."
 
 printTitle "Generate Docker Compose File"
@@ -107,7 +115,7 @@ if [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ] || [ -z "$(grep -Eo '^
 fi
 
 if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
-    printTitle "Generated Crowdsec Bouncer Key"
+    printTitle "Generate Crowdsec Bouncer Key"
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d crowdsec
     echo "Waiting for Crowdsec to start..."
     sleep 10 # Hopefully enough time for any initialization to occur
@@ -167,3 +175,10 @@ sudo systemctl enable frpc.service
 sudo systemctl start frpc.service
 echo "Note: FRPC will not be automatically restarted due to the risk of failing to reconnect. You must restart it manually."
 echo "Done."
+
+printTitle "Finished"
+echo "Note:
+- You may still need to run install_remote.sh.
+- Some image tags are hardcoded - you may need to update these manually.
+- Some services may need manual setup in their respective GUIs."
+printLine -
