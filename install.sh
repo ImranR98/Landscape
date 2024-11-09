@@ -2,8 +2,6 @@
 # - Confirm everything works
 # - Remaining remote components
 #   - frpc/frpc-preboot-subcomponent
-#   - logtfy/logtfy-remote-subcomponent
-#   - strelaysrv
 # - Manual update script instead of watchtower
 # - mTLS
 # - Generally go through and optimize everything, confirm parity with existing system
