@@ -6,3 +6,5 @@ frps.service
 frpc.ini
 frpc-preboot.ini
 temp_code.txt
+strelaysrv.service
+strelaysrv.docker-compose.yaml
