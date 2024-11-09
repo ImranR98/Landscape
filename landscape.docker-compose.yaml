@@ -177,7 +177,7 @@ services:
             # - "--entrypoints.websecure.http.tls.certResolver=le" 
             # - "--entrypoints.websecure.http.tls.domains[0].main=$SERVICES_DOMAIN"
             # - "--entrypoints.websecure.http.tls.domains[0].sans=*.$SERVICES_DOMAIN"
-            - "--certificatesresolvers.le.acme.email=contact@$SERVICES_DOMAIN"
+            - "--certificatesresolvers.le.acme.email=$DOMAIN_OWNER_EMAIL"
             - "--certificatesresolvers.le.acme.storage=./acme.json"
             - "--certificatesresolvers.le.acme.tlschallenge=true"
             - "--experimental.plugins.geoblock.modulename=github.com/PascalMinder/geoblock"

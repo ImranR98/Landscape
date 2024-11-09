@@ -1,5 +1,4 @@
 # TODO:
-# - Clean up vars
 # - Safe stop/start script
 # - Fix logtfy
 # - mTLS
@@ -89,6 +88,10 @@ if [ ! -d "$STATE_DIR"/crowdsec/dashboard-db/metabase.db ]; then
     rm "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip
     echo "- Crowdsec dashboard initialized with email \"crowdsec@crowdsec.net\" and password \"!!Cr0wdS3c_M3t4b4s3??\""
 fi
+echo "issuerUrl: https://auth.$SERVICES_DOMAIN/.well-known/openid-configuration
+clientId: immich
+clientSecret: $IMMICH_OAUTH_CLIENT_SECRET
+autoLaunch: true" > "$STATE_DIR"/immich/oauth_info.txt
 echo "Done."
 
 printTitle "Generate Docker Compose File"
