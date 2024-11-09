@@ -77,11 +77,8 @@ if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/
     openssl req -new -x509 -key "$STATE_DIR"/traefik/mtls/cakey.pem -out "$STATE_DIR"/traefik/mtls/cacert.pem -subj "/CN=$SERVICES_DOMAIN"
     echo "- New mTLS key + cert created."
 fi
-if [ ! -f "$STATE_DIR"/frpc/frpc.ini ]; then
-    bash "$HERE_LX1A"/files/frpc.generate.sh
-    mv "$HERE_LX1A"/files/frpc.ini "$STATE_DIR"/frpc
-    echo "- New FRPC token created/synced."
-fi
+bash "$HERE_LX1A"/files/frpc.generate.sh
+mv "$HERE_LX1A"/files/frpc.ini "$STATE_DIR"/frpc
 if [ ! -d "$STATE_DIR"/crowdsec/dashboard-db/metabase.db ]; then
     wget -q https://crowdsec-statics-assets.s3-eu-west-1.amazonaws.com/metabase_sqlite.zip -O "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip
     unzip -q "$STATE_DIR"/crowdsec/dashboard-db/metabase.db.zip -d "$STATE_DIR"/crowdsec/dashboard-db/
@@ -91,7 +88,7 @@ fi
 echo "issuerUrl: https://auth.$SERVICES_DOMAIN/.well-known/openid-configuration
 clientId: immich
 clientSecret: $IMMICH_OAUTH_CLIENT_SECRET
-autoLaunch: true" > "$STATE_DIR"/immich/oauth_info.txt
+autoLaunch: true" >"$STATE_DIR"/immich/oauth_info.txt
 echo "Done."
 
 printTitle "Generate Docker Compose File"
@@ -152,5 +149,22 @@ sudo mv "$STATE_DIR"/landscape.service /etc/systemd/system/landscape.service
 sudo chcon -t systemd_unit_file_t /etc/systemd/system/landscape.service # Without this, SELinux prevents Systemd from seeing the file
 sudo systemctl daemon-reload
 sudo systemctl enable landscape.service
+sudo systemctl stop landscape.service || :
+sleep 5
 sudo systemctl start landscape.service
+echo "Done."
+
+printTitle "Generate Docker Compose and Systemd Files for FRPC and Start the Service"
+cat "$HERE_LX1A"/frpc.docker-compose.yaml | envsubst >"$STATE_DIR"/frpc.docker-compose.yaml
+
+generateComposeService frpc 1000 >"$STATE_DIR"/frpc.service
+awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STATE_DIR"/frpc.service >"$STATE_DIR"/frpc.service.temp
+awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/frpc.service.temp >"$STATE_DIR"/frpc.service
+rm "$STATE_DIR"/frpc.service.temp
+sudo mv "$STATE_DIR"/frpc.service /etc/systemd/system/frpc.service
+sudo chcon -t systemd_unit_file_t /etc/systemd/system/frpc.service
+sudo systemctl daemon-reload
+sudo systemctl enable frpc.service
+sudo systemctl start frpc.service
+echo "Note: FRPC will not be automatically restarted due to the risk of failing to reconnect. You must restart it manually."
 echo "Done."

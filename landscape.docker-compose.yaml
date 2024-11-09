@@ -62,15 +62,6 @@ services:
         user: "1000:1000"
         restart: on-failure
 
-    # FRPC - Reverse Proxy Client
-    frpc:
-        image: fatedier/frpc:v0.61.0
-        container_name: frpc
-        restart: always
-        volumes:
-        - $STATE_DIR/frpc/frpc.ini:/frpc.ini
-        network_mode: host
-
     # Monero node
     monerod:
         image: sethsimmons/simple-monerod:latest
