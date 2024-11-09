@@ -64,3 +64,8 @@ rm "$HERE_M3U8"/files/logtfy.remote.temp.json
 rm "$HERE_M3U8"/files/logtfy.remote.service
 rm "$HERE_M3U8"/files/logtfy.remote.docker-compose.temp.yaml
 ssh -A -t "$PROXY_SSH_STRING" "bash '$PROXY_HOME/logtfy/install.sh'"
+
+# Install FRPC for preboot environment
+bash "$HERE_M3U8"/files/dracut-crypt-ssh.install.sh
+bash "$HERE_M3U8"/files/frpc-preboot.install.sh
+rm "$HERE_M3U8"/files/frpc-preboot.ini

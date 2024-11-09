@@ -1,8 +1,4 @@
 # TODO:
-# - Confirm everything works
-# - Remaining remote components
-#   - frpc/frpc-preboot-subcomponent
-# - Manual update script instead of watchtower
 # - mTLS
 # - Generally go through and optimize everything, confirm parity with existing system
 # - Plan and do migration
