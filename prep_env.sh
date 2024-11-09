@@ -79,7 +79,7 @@ syncRemoteEnvFileIfUndefined() {
         ssh "$SSH_STRING" "echo '$VAR_VAL' >> '$PATH_ON_REMOTE'"
     fi
 
-    scp "$SSH_STRING":"$PATH_ON_REMOTE" "$LOCAL_ENV_FILE"
+    scp -q "$SSH_STRING":"$PATH_ON_REMOTE" "$LOCAL_ENV_FILE"
 }
 
 pullComposeImages() {
@@ -129,8 +129,14 @@ WantedBy=multi-user.target"
 printLine() {
     linechar="="
     if [ -n "$1" ]; then linechar="$1"; fi
-    printf "%0.s"$linechar"" $(seq 1 "$(tput cols)")
+    printf "%0.s"$linechar"" $(seq 1 "$(tput cols 2>/dev/null || :)")
     echo ""
+}
+
+printTitle() {
+    printLine
+    echo "$1"
+    printLine
 }
 
 parseImageLine() {
@@ -237,24 +243,4 @@ replaceImageTagsInYAML() {
             echo "$LINE"
         fi
     done <"$FILE"
-}
-
-grabK8sObjectsInManifest() {
-    local manifest_file="$1"
-    sed '/^\s*#/d' "$manifest_file" | kubectl apply --dry-run=client -f - -o json | (jq -c 'if has("items") and (.items | type == "array") then .items[] else [.][] end' 2>/dev/null || :) | while read -r object; do
-        kind=$(echo "$object" | jq -r '.kind')
-        name=$(echo "$object" | jq -r '.metadata.name')
-        namespace=$(echo "$object" | jq -r '.metadata.namespace // "default"') # Default to "default" namespace if not present
-        if kubectl get "$kind" "$name" -n "$namespace" >/dev/null 2>&1; then
-            kubectl get "$kind" "$name" -n "$namespace" -o yaml
-        fi
-    done
-}
-
-deletePodsByGrep() {
-    if [ -n "$1" ]; then
-        for pod in $(kubectl -n production get pod | grep "$1" | awk '{print $1}'); do
-            kubectl -n production delete pod "$pod"
-        done
-    fi
 }
