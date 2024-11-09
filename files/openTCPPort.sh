@@ -1,5 +1,7 @@
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport $1 -j ACCEPT
-sudo netfilter-persistent save
+if [ -n "$(which netfilter-persistent)" ]; then
+    sudo netfilter-persistent save
+fi
 
 # 22/TCP SSH
 # 7000/TCP FRP

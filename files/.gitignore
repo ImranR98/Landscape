@@ -1,6 +1,8 @@
 landscape.docker-compose.yaml
 landscape.service
 landscape.service.temp
+landscape-remote.docker-compose.yaml
+landscape-remote.service
 frps-tokens.txt
 frps.service
 frpc.ini

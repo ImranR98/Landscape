@@ -1,5 +1,5 @@
 # TODO:
-# - Remote: Marge docker compose and simplify install
+# - Clean up vars
 # - Safe stop/start script
 # - Fix logtfy
 # - mTLS
@@ -23,7 +23,6 @@ else
     echo "Already installed."
 fi
 
-# Ensure state and other required dirs exist
 printTitle "Create Required Directories"
 grep -Eo '\$MAIN_PARENT_DIR[^:]+:' "$HERE_LX1A"/landscape.docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$' | while read dir; do
     mkdir -p "$MAIN_PARENT_DIR/$(echo $dir | tail -c +18)"
@@ -120,7 +119,6 @@ if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
     echo "Done."
 fi
 
-# If no Ntfy service account token has been defined, start Ntfy, create a service user, and save the token
 if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
     printTitle "Create Write-Only Ntfy Service Account + Token"
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d ntfy
@@ -138,7 +136,6 @@ if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
     echo "Done."
 fi
 
-# Re-generate the compose file to account for any env. var. 
 printTitle "Regenerate Docker Compose File to Pick Up any Changes"
 cat "$HERE_LX1A"/landscape.docker-compose.yaml | envsubst >"$STATE_DIR"/landscape.docker-compose.yaml
 echo "Done."
