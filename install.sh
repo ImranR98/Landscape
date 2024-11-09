@@ -1,7 +1,3 @@
-# TODO:
-# - Generally go through and optimize everything, confirm parity with existing system
-# - Plan and do migration
-
 #!/bin/bash
 set -e
 
