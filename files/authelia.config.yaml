@@ -1,3 +1,9 @@
+# NOTE: Any ending (strictly ending, not just containing) with the 'IGNORE INITIALLY' comment 
+#       will be ignored by install.sh when copying this file for the first time (but not when updating it later).
+#       The main use case for this is to avoid applying 'bypass' policies to some sites that
+#       should not be protected by Authelia once fully set up, but should be protected before
+#       some manual step is taken (usually manual creation of an admin account).
+
 jwt_secret: $AUTHELIA_JWT_SECRET
 
 log:
@@ -12,14 +18,14 @@ authentication_backend:
 
 access_control:
   rules:
-    - domain: tv.$SERVICES_DOMAIN
-      policy: bypass
+    - domain: tv.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
     - domain: pixelntfy.$SERVICES_DOMAIN
       policy: bypass
     - domain: isbn.$SERVICES_DOMAIN
       policy: bypass
-    - domain: ha.$SERVICES_DOMAIN
-      policy: bypass
+    - domain: ha.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
     - domain: ntfy.$SERVICES_DOMAIN
       policy: bypass
     - domain: files.$SERVICES_DOMAIN
@@ -42,18 +48,18 @@ access_control:
       - '^/[^/]+\.png$'
       - '^/__heartbeat__/?$'
       policy: bypass
-    - domain: music.$SERVICES_DOMAIN
-      policy: bypass
-    - domain: immich.$SERVICES_DOMAIN
-      policy: bypass
+    - domain: music.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
+    - domain: immich.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
     - domain: auth.$SERVICES_DOMAIN
       policy: bypass
     - domain: webdav.$SERVICES_DOMAIN
       policy: bypass
-    - domain: plausible.$SERVICES_DOMAIN
-      policy: bypass
-    - domain: opodsync.$SERVICES_DOMAIN
-      policy: bypass
+    - domain: plausible.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
+    - domain: opodsync.$SERVICES_DOMAIN # IGNORE INITIALLY
+      policy: bypass # IGNORE INITIALLY
     - domain: ytdl.$SERVICES_DOMAIN
       policy: one_factor
     - domain: '*.$SERVICES_TOP_DOMAIN'
