@@ -1,5 +1,4 @@
 # TODO:
-# - Safe stop/start script
 # - Fix logtfy
 # - mTLS
 # - Generally go through and optimize everything, confirm parity with existing system
