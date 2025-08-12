@@ -5,14 +5,16 @@ HERE_LX1A="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source "$HERE_LX1A"/prep_env.sh
 
 printTitle "Install Docker"
-if [ -z "$(docker compose version 2>/dev/null || :)" ]; then
+if ! which docker; then
+    if [ "$SUDO_COMMAND" == "run0" ]; then
+        echo "Docker not found. Please install it." >&2
+        exit 1
+    fi
     sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo --overwrite &&
         sudo dnf -q install docker-ce docker-compose-plugin -y &&
         sudo systemctl enable --now -q docker && sleep 5 &&
         sudo systemctl is-active docker &&
         sudo usermod -aG docker $USER
-else
-    echo "Already installed."
 fi
 
 printTitle "Create Required Directories"
@@ -70,10 +72,10 @@ cp "$HERE_LX1A"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
 cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml
 cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml
-cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | sudo dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
-echo "$MOSQUITTO_PRIVATE_KEY" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
-echo "$MOSQUITTO_CERTIFICATE" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
-echo "$MOSQUITTO_CREDENTIALS" | sudo dd status=none of="$STATE_DIR"/mosquitto/config/password_file
+cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
+echo "$MOSQUITTO_PRIVATE_KEY" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
+echo "$MOSQUITTO_CERTIFICATE" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
+echo "$MOSQUITTO_CREDENTIALS" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/password_file
 echo "$WEBDAV_HTPASSWD" >"$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
     openssl genrsa -out "$STATE_DIR"/traefik/mtls/cakey.pem 4096
@@ -101,11 +103,11 @@ if [ -n "$PRINT_IMMICH_OAUTH_INFO" ]; then
     echo "- Immich OAuth info for reference (must be set manually in the GUI):"
     cat "$STATE_DIR"/immich/oauth_info.txt
 fi
-sudo chown -R root:root "$STATE_DIR"/homeassistant
-sudo chown 999:999 $STATE_DIR/plausible/data
-sudo chown root:root $STATE_DIR/plausible/event_data
-sudo chown root:root $STATE_DIR/plausible/event_logs
-sudo chown 65534:65534 "$STATE_DIR/prometheus/data"
+$SUDO_COMMAND chown -R root:root "$STATE_DIR"/homeassistant
+$SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
+$SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
+$SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
+$SUDO_COMMAND chown 65534:65534 "$STATE_DIR/prometheus/data"
 
 if [ ! -f "$STATE_DIR"/registry/auth/.htpasswd ]; then
     htpasswd -Bc "$STATE_DIR"/registry/auth/.htpasswd "$USER"
@@ -123,7 +125,7 @@ if [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ] || [ -z "$(grep -Eo '^
     while [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ]; do
         sleep 1
     done
-    cat "$HERE_LX1A"/files/homeassistant.config.http.yaml | sudo dd status=none of="$STATE_DIR"/homeassistant/configuration.yaml oflag=append conv=notrunc
+    cat "$HERE_LX1A"/files/homeassistant.config.http.yaml | $SUDO_COMMAND dd status=none of="$STATE_DIR"/homeassistant/configuration.yaml oflag=append conv=notrunc
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down homeassistant
     echo "Done."
 fi
@@ -148,11 +150,11 @@ if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
     echo "Done."
 fi
 sed -i 's/use_wal: false/use_wal: true/' "$STATE_DIR"/crowdsec/config/config.yaml
-sudo mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
-cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | sudo sudo dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | sudo sudo dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | sudo sudo dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | sudo sudo dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
+$SUDO_COMMAND mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
+cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
+cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
+cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
+cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
 
 if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
     printTitle "Create Write-Only Ntfy Service Account + Token and Ntfy Admin Account"
@@ -192,13 +194,13 @@ generateComposeService landscape 1000 >"$STATE_DIR"/landscape.service
 awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STATE_DIR"/landscape.service >"$STATE_DIR"/landscape.service.temp
 awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/landscape.service.temp >"$STATE_DIR"/landscape.service
 rm "$STATE_DIR"/landscape.service.temp
-sudo mv "$STATE_DIR"/landscape.service /etc/systemd/system/landscape.service
-sudo chcon -t systemd_unit_file_t /etc/systemd/system/landscape.service # Without this, SELinux prevents Systemd from seeing the file
-sudo systemctl daemon-reload
-sudo systemctl enable landscape.service
-sudo systemctl stop landscape.service || :
+$SUDO_COMMAND mv "$STATE_DIR"/landscape.service /etc/systemd/system/landscape.service
+$SUDO_COMMAND chcon -t systemd_unit_file_t /etc/systemd/system/landscape.service # Without this, SELinux prevents Systemd from seeing the file
+$SUDO_COMMAND systemctl daemon-reload
+$SUDO_COMMAND systemctl enable landscape.service
+$SUDO_COMMAND systemctl stop landscape.service || :
 sleep 5
-sudo systemctl start landscape.service
+$SUDO_COMMAND systemctl start landscape.service
 echo "Done."
 
 printTitle "Generate Docker Compose and Systemd Files for FRPC and Start the Service"
@@ -208,11 +210,11 @@ generateComposeService frpc 1000 >"$STATE_DIR"/frpc.service
 awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STATE_DIR"/frpc.service >"$STATE_DIR"/frpc.service.temp
 awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/frpc.service.temp >"$STATE_DIR"/frpc.service
 rm "$STATE_DIR"/frpc.service.temp
-sudo mv "$STATE_DIR"/frpc.service /etc/systemd/system/frpc.service
-sudo chcon -t systemd_unit_file_t /etc/systemd/system/frpc.service
-sudo systemctl daemon-reload
-sudo systemctl enable frpc.service
-sudo systemctl start frpc.service
+$SUDO_COMMAND mv "$STATE_DIR"/frpc.service /etc/systemd/system/frpc.service
+$SUDO_COMMAND chcon -t systemd_unit_file_t /etc/systemd/system/frpc.service
+$SUDO_COMMAND systemctl daemon-reload
+$SUDO_COMMAND systemctl enable frpc.service
+$SUDO_COMMAND systemctl start frpc.service
 echo "Note: FRPC will not be automatically restarted due to the risk of failing to reconnect. You must restart it manually."
 echo "Done."
 

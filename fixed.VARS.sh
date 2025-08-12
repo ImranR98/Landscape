@@ -18,3 +18,8 @@ if [ "$PROXY_USER" = root ]; then
 fi
 
 export PROXY_IP="$((nslookup $PROXY_HOST || '') | awk '/^Address: / { print $2 }' | head -1)"
+
+export SUDO_COMMAND="sudo"
+if which rpm-ostree; then
+    export SUDO_COMMAND="run0"
+fi

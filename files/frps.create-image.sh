@@ -5,8 +5,8 @@ set -e
 ORIGINAL_DIR="$(pwd)"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 UPDATE_DIR=/update_artifacts
-sudo mkdir -p "$UPDATE_DIR"
-sudo chown $(id -u):$(id -g) "$UPDATE_DIR"
+$SUDO_COMMAND mkdir -p "$UPDATE_DIR"
+$SUDO_COMMAND chown $(id -u):$(id -g) "$UPDATE_DIR"
 trap "cd '$ORIGINAL_DIR'" EXIT
 cd "$UPDATE_DIR"
 

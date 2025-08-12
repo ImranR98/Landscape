@@ -55,9 +55,9 @@ rsyncWithChownContent() {
         GROUP=$UID
     fi
     mkdir -p "$DESTINATION"
-    sudo rsync -ar "$ORIGIN"/ "$DESTINATION"/
-    sudo chown "$OWNER" -R "$DESTINATION"/*
-    sudo chgrp "$GROUP" -R "$DESTINATION"/*
+    $SUDO_COMMAND rsync -ar "$ORIGIN"/ "$DESTINATION"/
+    $SUDO_COMMAND chown "$OWNER" -R "$DESTINATION"/*
+    $SUDO_COMMAND chgrp "$GROUP" -R "$DESTINATION"/*
 }
 
 syncRemoteEnvFileIfUndefined() {
