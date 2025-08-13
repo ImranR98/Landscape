@@ -60,10 +60,13 @@ cp "$HERE_LX1A"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
 cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml
 cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml
-cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
-echo "$MOSQUITTO_PRIVATE_KEY" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
-echo "$MOSQUITTO_CERTIFICATE" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
-echo "$MOSQUITTO_CREDENTIALS" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/password_file
+if ! ls "$STATE_DIR"/mosquitto/config 2>/dev/null | grep mosquitto.conf; then
+    cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
+    echo "$MOSQUITTO_PRIVATE_KEY" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
+    echo "$MOSQUITTO_CERTIFICATE" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
+    echo "$MOSQUITTO_CREDENTIALS" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/password_file
+    echo "- Mosquitto config created."
+fi
 echo "$WEBDAV_HTPASSWD" >"$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
     openssl genrsa -out "$STATE_DIR"/traefik/mtls/cakey.pem 4096
