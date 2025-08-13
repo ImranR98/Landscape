@@ -44,7 +44,6 @@ if [ ! -f "$STATE_DIR"/traefik/acme.json ]; then
 fi
 chmod 600 "$STATE_DIR"/traefik/acme.json
 cat "$HERE_LX1A"/files/traefik.dynamic-configuration.yaml | envsubst >"$STATE_DIR"/traefik/dynamic-configuration.yaml
-cat "$HERE_LX1A"/files/prometheus.yaml | envsubst >"$STATE_DIR"/prometheus/config/prometheus.yaml
 cat "$HERE_LX1A"/files/crowdsec.acquis.yaml | envsubst >"$STATE_DIR"/crowdsec/acquis.yaml
 cat "$HERE_LX1A"/files/crowdsec.notifications-http.yaml | envsubst >"$STATE_DIR"/crowdsec/notifications-http.yaml
 cat "$HERE_LX1A"/files/crowdsec.profiles.yaml | envsubst >"$STATE_DIR"/crowdsec/profiles.yaml
@@ -57,8 +56,6 @@ cat "$HERE_LX1A"/files/filebrowser.json | envsubst >"$STATE_DIR"/filebrowser/con
 cat "$HERE_LX1A"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/etc/server.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
-cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml
-cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml
 if ! ls "$STATE_DIR"/mosquitto/config 2>/dev/null | grep mosquitto.conf; then
     set -x
     cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
@@ -106,11 +103,20 @@ if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
     $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
+    $SUDO_COMMAND bash -c "chown root:root $STATE_DIR/plausible/data && \
+    cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml && \
+    cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml"
+    set +x
+fi
+if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/config")" != "65534:65534" ]; then
+    set -x
+    cat "$HERE_LX1A"/files/prometheus.yaml | envsubst | $SUDO_COMMAND tee "$STATE_DIR"/prometheus/config/prometheus.yaml
+    $SUDO_COMMAND chown -R 65534:65534 "$STATE_DIR/prometheus/config"
     set +x
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/data")" != "65534:65534" ]; then
     set -x
-    $SUDO_COMMAND chown 65534:65534 "$STATE_DIR/prometheus/data"
+    $SUDO_COMMAND chown -R 65534:65534 "$STATE_DIR/prometheus/data"
     set +x
 fi
 
