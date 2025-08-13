@@ -6,10 +6,10 @@ source "$HERE_LX1A"/prep_env.sh
 
 printTitle "Create Required Directories"
 grep -Eo '\$MAIN_PARENT_DIR[^:]+:' "$HERE_LX1A"/landscape.docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$' | while read dir; do
-    mkdir -p "$MAIN_PARENT_DIR/$(echo $dir | tail -c +18)"
+    mkdir -p "$MAIN_PARENT_DIR/$(echo $dir | tail -c +18)" || : # May already exist with non-user permissions
 done
 grep -Eo '\$STATE_DIR[^:]+:' "$HERE_LX1A"/landscape.docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$' | while read dir; do
-    mkdir -p "$STATE_DIR/$(echo $dir | tail -c +12)"
+    mkdir -p "$STATE_DIR/$(echo $dir | tail -c +12)" || : # May already exist with non-user permissions
 done
 mkdir -p "$STATE_DIR"/logtfy
 mkdir -p "$STATE_DIR"/prometheus/config
@@ -97,6 +97,7 @@ $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
 $SUDO_COMMAND chown 65534:65534 "$STATE_DIR/prometheus/data"
 
 if [ ! -f "$STATE_DIR"/registry/auth/.htpasswd ]; then
+    echo "Docker registry needs a password:"
     htpasswd -Bc "$STATE_DIR"/registry/auth/.htpasswd "$USER"
 fi
 echo "Done."
