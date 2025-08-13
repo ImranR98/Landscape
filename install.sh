@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+set -x
 
 HERE_LX1A="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source "$HERE_LX1A"/prep_env.sh
@@ -90,11 +91,18 @@ if [ -n "$PRINT_IMMICH_OAUTH_INFO" ]; then
     echo "- Immich OAuth info for reference (must be set manually in the GUI):"
     cat "$STATE_DIR"/immich/oauth_info.txt
 fi
-$SUDO_COMMAND chown -R root:root "$STATE_DIR"/homeassistant
-$SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
-$SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
-$SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
-$SUDO_COMMAND chown 65534:65534 "$STATE_DIR/prometheus/data"
+if [ "$(stat -c '%U:%G' "$STATE_DIR/homeassistant")" != "root:root" ]; then
+    $SUDO_COMMAND chown -R root:root "$STATE_DIR/homeassistant"
+    $SUDO_COMMAND chmod o+r -R "$STATE_DIR/homeassistant"
+fi
+if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
+    $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
+    $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
+    $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
+fi
+if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/data")" != "65534:65534" ]; then
+    $SUDO_COMMAND chown 65534:65534 "$STATE_DIR/prometheus/data"
+fi
 
 if [ ! -f "$STATE_DIR"/registry/auth/.htpasswd ]; then
     echo "Docker registry needs a password:"
@@ -110,9 +118,7 @@ if [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ] || [ -z "$(grep -Eo '^
     printTitle "Modify Auto-Generated Configuration for Home Assistant"
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d homeassistant
     echo "Waiting for HA config file to be generated..."
-    while [ ! -f "$STATE_DIR"/homeassistant/configuration.yaml ]; do
-        sleep 1
-    done
+    sleep 10
     cat "$HERE_LX1A"/files/homeassistant.config.http.yaml | $SUDO_COMMAND dd status=none of="$STATE_DIR"/homeassistant/configuration.yaml oflag=append conv=notrunc
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down homeassistant
     echo "Done."
@@ -208,7 +214,5 @@ echo "Done."
 
 printTitle "Finished"
 echo "Note:
-- You may still need to run install_remote.sh.
-- Some image tags are hardcoded - you may need to update these manually.
 - Some services may need manual setup in their respective GUIs."
 printLine -
