@@ -147,11 +147,14 @@ if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
     echo "Done."
 fi
 sed -i 's/use_wal: false/use_wal: true/' "$STATE_DIR"/crowdsec/config/config.yaml
-$SUDO_COMMAND mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
-cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
-cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
+if [ ! -d "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist ]; then
+    $SUDO_COMMAND mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
+    cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
+    echo "- Crowdsec whitelists created."
+fi
 
 if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
     printTitle "Create Write-Only Ntfy Service Account + Token and Ntfy Admin Account"
@@ -191,13 +194,10 @@ generateComposeService landscape 1000 >"$STATE_DIR"/landscape.service
 awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STATE_DIR"/landscape.service >"$STATE_DIR"/landscape.service.temp
 awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/landscape.service.temp >"$STATE_DIR"/landscape.service
 rm "$STATE_DIR"/landscape.service.temp
-$SUDO_COMMAND mv "$STATE_DIR"/landscape.service /etc/systemd/system/landscape.service
-$SUDO_COMMAND chcon -t systemd_unit_file_t /etc/systemd/system/landscape.service # Without this, SELinux prevents Systemd from seeing the file
-$SUDO_COMMAND systemctl daemon-reload
-$SUDO_COMMAND systemctl enable landscape.service
-$SUDO_COMMAND systemctl stop landscape.service || :
-sleep 5
-$SUDO_COMMAND systemctl start landscape.service
+$SUDO_COMMAND bash -c "mv "$STATE_DIR"/landscape.service /etc/systemd/system/landscape.service && \
+    chcon -t systemd_unit_file_t /etc/systemd/system/landscape.service && \
+    systemctl daemon-reload && systemctl enable landscape.service && \
+    (systemctl stop landscape.service || :) && sleep 5 && systemctl start landscape.service"
 echo "Done."
 
 printTitle "Generate Docker Compose and Systemd Files for FRPC and Start the Service"
@@ -207,11 +207,10 @@ generateComposeService frpc 1000 >"$STATE_DIR"/frpc.service
 awk -v SCRIPT_DIR="$STATE_DIR" '{gsub("path_to_here", SCRIPT_DIR); print}' "$STATE_DIR"/frpc.service >"$STATE_DIR"/frpc.service.temp
 awk -v MY_UID="$(id -u)" '{gsub("1000", MY_UID); print}' "$STATE_DIR"/frpc.service.temp >"$STATE_DIR"/frpc.service
 rm "$STATE_DIR"/frpc.service.temp
-$SUDO_COMMAND mv "$STATE_DIR"/frpc.service /etc/systemd/system/frpc.service
-$SUDO_COMMAND chcon -t systemd_unit_file_t /etc/systemd/system/frpc.service
-$SUDO_COMMAND systemctl daemon-reload
-$SUDO_COMMAND systemctl enable frpc.service
-$SUDO_COMMAND systemctl start frpc.service
+$SUDO_COMMAND bash -c "mv "$STATE_DIR"/frpc.service /etc/systemd/system/frpc.service && \
+    chcon -t systemd_unit_file_t /etc/systemd/system/frpc.service && \
+    systemctl daemon-reload && systemctl enable frpc.service && \
+    systemctl start frpc.service"
 echo "Note: FRPC will not be automatically restarted due to the risk of failing to reconnect. You must restart it manually."
 echo "Done."
 
