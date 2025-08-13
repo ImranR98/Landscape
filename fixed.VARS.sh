@@ -20,6 +20,6 @@ fi
 export PROXY_IP="$((nslookup $PROXY_HOST || '') | awk '/^Address: / { print $2 }' | head -1)"
 
 export SUDO_COMMAND="sudo"
-if which rpm-ostree; then
+if which rpm-ostree 2>&1 >/dev/null; then
     export SUDO_COMMAND="run0"
 fi

@@ -4,19 +4,6 @@ set -e
 HERE_LX1A="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 source "$HERE_LX1A"/prep_env.sh
 
-printTitle "Install Docker"
-if ! which docker; then
-    if [ "$SUDO_COMMAND" == "run0" ]; then
-        echo "Docker not found. Please install it." >&2
-        exit 1
-    fi
-    sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo --overwrite &&
-        sudo dnf -q install docker-ce docker-compose-plugin -y &&
-        sudo systemctl enable --now -q docker && sleep 5 &&
-        sudo systemctl is-active docker &&
-        sudo usermod -aG docker $USER
-fi
-
 printTitle "Create Required Directories"
 grep -Eo '\$MAIN_PARENT_DIR[^:]+:' "$HERE_LX1A"/landscape.docker-compose.yaml | awk -F: '{print $1}' | grep -E '/[^(/|.)]+$' | while read dir; do
     mkdir -p "$MAIN_PARENT_DIR/$(echo $dir | tail -c +18)"

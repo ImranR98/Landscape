@@ -6,6 +6,11 @@
 
 HERE_L3D9="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+if ! which docker 2>&1 >/dev/null; then
+    echo "Docker not found. Please install it." >&2
+    exit 1
+fi
+
 if [ -f "$HERE_L3D9"/VARS.production.sh ]; then
     source "$HERE_L3D9"/VARS.production.sh
 elif [ -f "$HERE_L3D9"/VARS.staging.sh ]; then
@@ -249,8 +254,7 @@ mergeYaml() {
     fi
 
     # Merge file2 into file1, preserving arrays by appending instead of replacing
-    yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' "$file1" "$file2" > "${file1}.tmp" && mv "${file1}.tmp" "$file1"
+    yq eval-all 'select(fileIndex == 0) *+ select(fileIndex == 1)' "$file1" "$file2" >"${file1}.tmp" && mv "${file1}.tmp" "$file1"
 
     echo "Merged YAML saved to $file1"
 }
-

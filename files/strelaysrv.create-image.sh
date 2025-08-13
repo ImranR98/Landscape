@@ -4,7 +4,7 @@ set -e
 # Prep
 ORIGINAL_DIR="$(pwd)"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
-UPDATE_DIR=/update_artifacts
+UPDATE_DIR=~/temp
 $SUDO_COMMAND mkdir -p "$UPDATE_DIR"
 $SUDO_COMMAND chown $(id -u):$(id -g) "$UPDATE_DIR"
 trap "cd '$ORIGINAL_DIR'" EXIT
