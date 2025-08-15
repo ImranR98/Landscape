@@ -99,8 +99,7 @@ if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
     $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
-    $SUDO_COMMAND bash -c "chown root:root $STATE_DIR/plausible/data && \
-    cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml && \
+    $SUDO_COMMAND bash -c "cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml && \
     cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml"
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/config")" != "65534:65534" ]; then
