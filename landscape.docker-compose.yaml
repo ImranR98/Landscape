@@ -458,7 +458,7 @@ services:
         networks:
             - traefik
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+            test: ["CMD", "sh", "-c", "wget -qO - http://localhost:80/health | grep -q OK"]
             interval: 30s
             timeout: 20s
             retries: 3
@@ -745,6 +745,27 @@ services:
             - "traefik.http.routers.navidrome.tls=true"
             - "traefik.http.routers.navidrome.middlewares=authelia@docker,geoblock@file"
             - "traefik.http.services.navidrome.loadbalancer.server.port=4533"
+        networks:
+            - traefik
+
+    # oPodSync - Podcast Sync
+    opodsync:
+        container_name: opodsync
+        image: ganeshlab/opodsync:latest
+        user: 1000:1000
+        depends_on:
+            - traefik
+        restart: unless-stopped
+        volumes:
+            - "$STATE_DIR/opodsync:/var/www/server/data"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.opodsync.rule=Host(`opodsync.$SERVICES_DOMAIN`)"
+            - "traefik.http.routers.opodsync.entrypoints=websecure"
+            - "traefik.http.routers.opodsync.tls.certresolver=le"
+            - "traefik.http.routers.opodsync.tls=true"
+            - "traefik.http.routers.opodsync.middlewares=geoblock@file"
+            - "traefik.http.services.opodsync.loadbalancer.server.port=8080"
         networks:
             - traefik
 
