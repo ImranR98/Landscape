@@ -64,6 +64,8 @@ access_control:
       policy: bypass # IGNORE INITIALLY
     - domain: docker.$SERVICES_DOMAIN
       policy: bypass
+    - domain: fmd.$SERVICES_DOMAIN
+      policy: bypass
     - domain: ytdl.$SERVICES_DOMAIN
       policy: one_factor
     - domain: ln.$SERVICES_DOMAIN
