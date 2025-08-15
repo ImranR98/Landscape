@@ -24,7 +24,6 @@ mkdir -p "$STATE_DIR"/registry/auth
 echo "Done."
 
 printTitle "Generate Required Config Files"
-cat "$HERE_LX1A"/files/logtfy.json | envsubst >"$STATE_DIR"/logtfy/config.json
 if [ ! -f ""$STATE_DIR"/authelia/config/configuration.yml" ]; then
     sed '/# IGNORE INITIALLY$/ s/^/# /' "$HERE_LX1A"/files/authelia.config.yaml | envsubst >"$STATE_DIR"/authelia/config/configuration.yml
     echo "- Generated Authelia config does not include lines that end with \"# IGNORE INITIALLY\"."
@@ -186,6 +185,7 @@ if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down ntfy
     echo "Done."
 fi
+cat "$HERE_LX1A"/files/logtfy.json | envsubst >"$STATE_DIR"/logtfy/config.json
 
 printTitle "Regenerate Docker Compose File to Pick Up any Changes"
 cat "$HERE_LX1A"/landscape.docker-compose.yaml | envsubst >"$STATE_DIR"/landscape.docker-compose.yaml
