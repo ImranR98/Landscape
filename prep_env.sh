@@ -12,15 +12,20 @@ if ! which docker 2>&1 >/dev/null; then
 fi
 
 if [ -f "$HERE_L3D9"/VARS.production.sh ]; then
-    source "$HERE_L3D9"/VARS.production.sh
+    MAIN_VARS_FILE="$HERE_L3D9"/VARS.production.sh
 elif [ -f "$HERE_L3D9"/VARS.staging.sh ]; then
-    source "$HERE_L3D9"/VARS.staging.sh
+    MAIN_VARS_FILE="$HERE_L3D9"/VARS.staging.sh
 elif [ -f "$HERE_L3D9"/VARS.sh ]; then
-    source "$HERE_L3D9"/VARS.sh
+    MAIN_VARS_FILE="$HERE_L3D9"/VARS.sh
 else
     echo "No VARS.sh file found!" >&2
     exit 1
 fi
+if ! diff <(grep -Eo '^export [^=]+' "$MAIN_VARS_FILE") <(grep -Eo '^export [^=]+' "$HERE_L3D9"/template.VARS.sh); then
+    echo "Your VARS file does not match the template: $MAIN_VARS_FILE" >&2
+    exit 1
+fi
+source "$MAIN_VARS_FILE"
 source "$HERE_L3D9"/fixed.VARS.sh
 if [ -f "$STATE_DIR"/generated.VARS.sh ]; then
     source "$STATE_DIR"/generated.VARS.sh
