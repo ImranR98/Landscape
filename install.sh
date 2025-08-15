@@ -57,13 +57,11 @@ cat "$HERE_LX1A"/files/ntfy.server.yml | envsubst >"$STATE_DIR"/ntfy/etc/server.
 cp "$HERE_LX1A"/files/immich.hwaccel.ml.yml "$STATE_DIR"/immich/hwaccel.ml.yml
 cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel.transcoding.yml
 if ! ls "$STATE_DIR"/mosquitto/config 2>/dev/null | grep mosquitto.conf; then
-    set -x
+    echo "Creating Mosquitto config..."
     cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
     echo "$MOSQUITTO_PRIVATE_KEY" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
     echo "$MOSQUITTO_CERTIFICATE" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
     echo "$MOSQUITTO_CREDENTIALS" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/password_file
-    set +x
-    echo "- Mosquitto config created."
 fi
 echo "$WEBDAV_HTPASSWD" >"$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
@@ -93,31 +91,27 @@ if [ -n "$PRINT_IMMICH_OAUTH_INFO" ]; then
     cat "$STATE_DIR"/immich/oauth_info.txt
 fi
 if [ "$(stat -c '%U:%G' "$STATE_DIR/homeassistant")" != "root:root" ]; then
-    set -x
+    echo "chown-ing HomeAssistant files..."
     $SUDO_COMMAND chown -R root:root "$STATE_DIR/homeassistant"
     $SUDO_COMMAND chmod o+r -R "$STATE_DIR/homeassistant"
-    set +x
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
-    set -x
+    echo "chown-ing Plausible directories..."
     $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
     $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
     $SUDO_COMMAND bash -c "chown root:root $STATE_DIR/plausible/data && \
     cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml && \
     cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml"
-    set +x
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/config")" != "65534:65534" ]; then
-    set -x
+    echo "Creating Prometheus config..."
     cat "$HERE_LX1A"/files/prometheus.yaml | envsubst | $SUDO_COMMAND tee "$STATE_DIR"/prometheus/config/prometheus.yaml
     $SUDO_COMMAND chown -R 65534:65534 "$STATE_DIR/prometheus/config"
-    set +x
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/data")" != "65534:65534" ]; then
-    set -x
+    echo "chown-ing Prometheus directory..."
     $SUDO_COMMAND chown -R 65534:65534 "$STATE_DIR/prometheus/data"
-    set +x
 fi
 
 if [ ! -f "$STATE_DIR"/registry/auth/.htpasswd ]; then
@@ -130,16 +124,14 @@ printTitle "Generate Docker Compose File"
 cat "$HERE_LX1A"/landscape.docker-compose.yaml | envsubst >"$STATE_DIR"/landscape.docker-compose.yaml
 echo "Done."
 
-if ! grep -Eq '^http' "$STATE_DIR"/homeassistant/configuration.yaml; then
+if ! grep -Eq '^http' "$STATE_DIR"/homeassistant/configuration.yaml 2>/dev/null; then
     printTitle "Modify Auto-Generated Configuration for Home Assistant"
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml up -d homeassistant
     echo "Waiting for HA config file to be generated..."
     sleep 10
-    set -x
     cat "$HERE_LX1A"/files/homeassistant.config.http.yaml | $SUDO_COMMAND dd status=none of="$STATE_DIR"/homeassistant/configuration.yaml oflag=append conv=notrunc
     $SUDO_COMMAND chmod o+r "$STATE_DIR"/homeassistant
     $SUDO_COMMAND chmod o+r "$STATE_DIR"/homeassistant/configuration.yaml
-    set +x
     docker compose -p landscape -f "$STATE_DIR"/landscape.docker-compose.yaml down homeassistant
     echo "Done."
 fi
@@ -165,14 +157,12 @@ if [ -z "$CROWDSEC_BOUNCER_KEY" ]; then
 fi
 sed -i 's/use_wal: false/use_wal: true/' "$STATE_DIR"/crowdsec/config/config.yaml
 if [ ! -d "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist ]; then
-    set -x
+    echo "Creating Crowdsec whitelists..."
     $SUDO_COMMAND mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
     cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
     cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
     cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
     cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
-    set +x
-    echo "- Crowdsec whitelists created."
 fi
 
 if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
