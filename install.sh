@@ -94,6 +94,10 @@ if [ "$(stat -c '%U:%G' "$STATE_DIR/homeassistant")" != "root:root" ]; then
     $SUDO_COMMAND chown -R root:root "$STATE_DIR/homeassistant"
     $SUDO_COMMAND chmod o+r -R "$STATE_DIR/homeassistant"
 fi
+if [ "$(stat -c '%U:%G' "$STATE_DIR/jitsi")" != "root:root" ]; then
+    echo "chown-ing Jitsi directories..."
+    $SUDO_COMMAND bash -c "chown root:root '$STATE_DIR/jitsi' && chown root:root '$STATE_DIR'/jitsi/*"
+fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
     echo "chown-ing Plausible directories..."
     $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
