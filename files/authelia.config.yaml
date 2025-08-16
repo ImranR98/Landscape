@@ -124,6 +124,7 @@ identity_providers:
           - 'profile'
           - 'email'
         userinfo_signed_response_alg: 'none'
+        token_endpoint_auth_method: 'client_secret_post'
       - client_id: 'open-webui'
         client_name: 'Open WebUI'
         client_secret: '$AUTHELIA_OPEN_WEBUI_CLIENT_SECRET'
