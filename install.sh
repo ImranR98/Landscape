@@ -58,9 +58,10 @@ cp "$HERE_LX1A"/files/immich.hwaccel.transcoding.yml "$STATE_DIR"/immich/hwaccel
 if ! ls "$STATE_DIR"/mosquitto/config 2>/dev/null | grep mosquitto.conf; then
     echo "Creating Mosquitto config..."
     cat "$HERE_LX1A"/files/mosquitto.conf | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/mosquitto.conf
-    echo "$MOSQUITTO_PRIVATE_KEY" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/private_key.pem
-    echo "$MOSQUITTO_CERTIFICATE" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem
-    echo "$MOSQUITTO_CREDENTIALS" | $SUDO_COMMAND dd status=none of="$STATE_DIR"/mosquitto/config/password_file
+    $SUDO_COMMAND bash -c "echo \"$MOSQUITTO_PRIVATE_KEY\" | dd status=none of=\"$STATE_DIR\"/mosquitto/config/private_key.pem && \
+    echo \"$MOSQUITTO_CERTIFICATE\" | dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem && \
+    echo \"$MOSQUITTO_CREDENTIALS\" | dd status=none of="$STATE_DIR"/mosquitto/config/password_file"
+    
 fi
 echo "$WEBDAV_HTPASSWD" >"$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
@@ -91,8 +92,7 @@ if [ -n "$PRINT_IMMICH_OAUTH_INFO" ]; then
 fi
 if [ "$(stat -c '%U:%G' "$STATE_DIR/homeassistant")" != "root:root" ]; then
     echo "chown-ing HomeAssistant files..."
-    $SUDO_COMMAND chown -R root:root "$STATE_DIR/homeassistant"
-    $SUDO_COMMAND chmod o+r -R "$STATE_DIR/homeassistant"
+    $SUDO_COMMAND bash -c "chown -R root:root '$STATE_DIR/homeassistant' && chmod o+r -R '$STATE_DIR/homeassistant'"
 fi
 if [ "$(stat -c '%U:%G' "$STATE_DIR/jitsi")" != "root:root" ]; then
     echo "chown-ing Jitsi directories..."
@@ -100,11 +100,9 @@ if [ "$(stat -c '%U:%G' "$STATE_DIR/jitsi")" != "root:root" ]; then
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/plausible/data")" != "999:999" ]; then
     echo "chown-ing Plausible directories..."
-    $SUDO_COMMAND chown 999:999 $STATE_DIR/plausible/data
-    $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_data
-    $SUDO_COMMAND chown root:root $STATE_DIR/plausible/event_logs
-    $SUDO_COMMAND bash -c "cp "$HERE_LX1A"/files/plausible.logs.xml "$STATE_DIR"/plausible/config/logs.xml && \
-    cp "$HERE_LX1A"/files/plausible.ipv4-only.xml "$STATE_DIR"/plausible/config/ipv4-only.xml"
+    $SUDO_COMMAND bash -c "chown 999:999 '$STATE_DIR/plausible/data' && chown root:root '$STATE_DIR/plausible/event_data' && \
+    chown root:root '$STATE_DIR/plausible/event_logs' && cp '$HERE_LX1A/files/plausible.logs.xml' '$STATE_DIR/plausible/config/logs.xml' && \
+    cp '$HERE_LX1A/files/plausible.ipv4-only.xml' '$STATE_DIR/plausible/config/ipv4-only.xml'"
 fi
 if [ "$(stat -c '%u:%g' "$STATE_DIR/prometheus/config")" != "65534:65534" ]; then
     echo "Creating Prometheus config..."
@@ -160,11 +158,13 @@ fi
 sed -i 's/use_wal: false/use_wal: true/' "$STATE_DIR"/crowdsec/config/config.yaml
 if [ ! -d "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist ]; then
     echo "Creating Crowdsec whitelists..."
-    $SUDO_COMMAND mkdir -p "$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist
-    cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/navidrome.whitelist.yaml
-    cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/immich.whitelist.yaml
-    cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/plausible.whitelist.yaml
-    cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | $SUDO_COMMAND dd status=none of="$STATE_DIR"/crowdsec/config/postoverflows/s01-whitelist/homeassistant.whitelist.yaml
+    CS_TEMP_DIR="$(mktemp -d)"
+    cat "$HERE_LX1A"/files/crowdsec.navidrome.whitelist.yaml | envsubst | dd status=none of="$CS_TEMP_DIR"/navidrome.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.immich.whitelist.yaml | envsubst | dd status=none of="$CS_TEMP_DIR"/immich.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.plausible.whitelist.yaml | envsubst | dd status=none of="$CS_TEMP_DIR"/plausible.whitelist.yaml
+    cat "$HERE_LX1A"/files/crowdsec.homeassistant.whitelist.yaml | envsubst | dd status=none of="$CS_TEMP_DIR"/homeassistant.whitelist.yaml
+    $SUDO_COMMAND bash -c "mkdir -p '$STATE_DIR/crowdsec/config/postoverflows/s01-whitelist' && mv '$CS_TEMP_DIR'/* '$STATE_DIR/crowdsec/config/postoverflows/s01-whitelist'"
+    rm -r "$CS_TEMP_DIR"
 fi
 
 if [ -z "$NTFY_SERVICE_USER_TOKEN" ]; then
