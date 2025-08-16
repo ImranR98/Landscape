@@ -66,7 +66,7 @@ rm "$HERE_M3U8"/files/logtfy.remote.temp.json
 docker pull imranrdev/logtfy
 echo "Done."
 
-printTitle "Generate Docker Compose and Systemd Files and Start the Service"
+printTitle "Generate Docker Compose and Systemd files and start the service"
 generateComposeService landscape-remote 1000 >"$HERE_M3U8"/files/landscape-remote.service
 cat "$HERE_M3U8"/landscape-remote.docker-compose.yaml | envsubst >"$HERE_M3U8"/files/landscape-remote.docker-compose.yaml
 scp "$HERE_M3U8"/files/landscape-remote.install.sh "$PROXY_SSH_STRING":~/landscape-remote-services/landscape-remote.install.sh
@@ -88,5 +88,6 @@ if [ "$UPDATE_ONLY_NON_FRPC" != true ]; then
         $SUDO_COMMAND bash "$HERE_M3U8"/files/dracut-crypt-ssh.install.sh "$USER"
         bash "$HERE_M3U8"/files/frpc-preboot.install.sh
         rm "$HERE_M3U8"/files/frpc-preboot.ini
+        echo "Done."
     fi
 fi
