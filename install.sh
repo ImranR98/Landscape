@@ -53,6 +53,7 @@ cat "$HERE_LX1A"/files/crowdsec.acquis.yaml | envsubst >"$STATE_DIR"/crowdsec/ac
 cat "$HERE_LX1A"/files/crowdsec.notifications-http.yaml | envsubst >"$STATE_DIR"/crowdsec/notifications-http.yaml
 cat "$HERE_LX1A"/files/crowdsec.profiles.yaml | envsubst >"$STATE_DIR"/crowdsec/profiles.yaml
 cat "$HERE_LX1A"/files/opencanary.json | envsubst >"$STATE_DIR"/opencanary/opencanary.json
+# TODO: Ensure the ports used by OpenCanary are not firewalled
 if [ ! -f "$STATE_DIR"/filebrowser/database/filebrowser.db ]; then
     touch "$STATE_DIR"/filebrowser/database/filebrowser.db
     echo "Initialized \"filebrowser.db\"."
@@ -68,6 +69,7 @@ if ! ls "$STATE_DIR"/mosquitto/config 2>/dev/null | grep -q mosquitto.conf; then
     echo \"$MOSQUITTO_CERTIFICATE\" | dd status=none of="$STATE_DIR"/mosquitto/config/certificate.pem && \
     echo \"$MOSQUITTO_CREDENTIALS\" | dd status=none of="$STATE_DIR"/mosquitto/config/password_file && \
     chmod o+rx '$STATE_DIR'/mosquitto/config"
+    # TODO: Ensure the ports used by Mosquitto are not firewalled (at least the mqtt-tls service, others -- non-TLS and websocket -- are not actively used)
 fi
 echo "$WEBDAV_HTPASSWD" >"$STATE_DIR"/webdav/config/htpasswd
 if [ ! -f "$STATE_DIR"/traefik/mtls/cacert.pem ] || [ ! -f "$STATE_DIR"/traefik/mtls/cakey.pem ]; then
